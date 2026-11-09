@@ -73,12 +73,14 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 /* ---------- S4 planta ---------- */
 #s4 .mapwrap{position:absolute;left:0;right:0;top:700px;height:520px;overflow:hidden}
 #s4 .map{position:absolute;left:50%;top:50%;width:1300px;margin-left:-650px;margin-top:-205px;
-  animation:mapmove 9.6s var(--ease-in-out) calc(var(--s)*1s) both}
+  animation:mapmove 7s var(--ease-in-out) calc(var(--s)*1s) both}
+#s4 .map{-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);
+  -webkit-mask-composite:source-in;mask-composite:intersect}
+/* lotes 3 e 5 (início da quadra 1) -> lotes 26 e 27 -> planta inteira com os 4 vendidos */
 @keyframes mapmove{
-  0%{transform:translateX(330px) scale(1)}
-  45%{transform:translateX(-150px) scale(1)}
-  75%{transform:translateX(-150px) scale(1.3)}
-  100%{transform:translateX(-150px) scale(1.3)}}
+  0%,32%{transform:translateX(330px) scale(1.15)}
+  50%,58%{transform:translateX(-200px) scale(1.15)}
+  75%,100%{transform:translateX(0) scale(.8)}}
 .legend{display:flex;gap:36px;font-size:26px;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
 .legend span{display:inline-flex;align-items:center;gap:12px}
 .sq{width:26px;height:26px;border-radius:5px}
@@ -180,10 +182,10 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
   <div class="mapwrap fade" style="--d:0.8"><img class="map" src="assets/planta.jpg"></div>
   <div class="wm wm-center" style="top:960px"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:1290px;display:flex;align-items:center;gap:36px">
-    <div class="display gold pop" data-anchor="s4.n37" style="--d:4.6;font-size:230px"><span data-count="37" data-from="39" data-anchor-t0="s4.n37" data-t0="4.8" data-dur="1.4">37</span></div>
+    <div class="display gold pop" data-anchor="s4.n37" style="--d:4.6;font-size:230px"><span data-count="35" data-from="39" data-anchor-t0="s4.n37" data-t0="4.8" data-dur="1.6">35</span></div>
     <div class="up" data-anchor="s4.n37" data-off="0.3" style="--d:4.9">
       <div style="font-size:46px;font-weight:700;line-height:1.15">lotes ainda<br>disponíveis</div>
-      <div class="serif" style="font-size:36px;font-style:italic;font-weight:500;color:rgba(246,239,226,.75);margin-top:10px">Os lotes 26 e 27 já foram vendidos.</div>
+      <div class="serif" style="font-size:36px;font-style:italic;font-weight:500;color:rgba(246,239,226,.75);margin-top:10px">Os lotes 3, 5, 26 e 27 já foram vendidos.</div>
     </div>
   </div>
 </section>
@@ -230,9 +232,9 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
   <div class="wm wm-center"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:560px">
     <div class="kicker up" style="--d:0.4">Tranquilidade</div>
-    <div class="serif rise" style="--d:0.6;font-size:104px;margin-top:22px">Documentação<br>completa e cópia<br>de tudo na<br><span class="gold">sua mão.</span></div>
+    <div class="serif rise" style="--d:0.6;font-size:104px;margin-top:22px">Terreno com<br>procedência e<br>documentação<br><span class="gold">completa.</span></div>
     <div class="line" style="--d:1.6;width:220px;margin:40px 0"></div>
-    <div class="body up" style="--d:1.9">A cadeia sucessória do terreno está completa. Ao fechar negócio, você vem ao escritório, vê os documentos e leva uma cópia de todos.</div>
+    <div class="body up" style="--d:1.9">Cadeia sucessória completa. Ao fechar negócio, você vem ao escritório, vê os documentos e leva uma cópia de todos.</div>
   </div>
 </section>
 
