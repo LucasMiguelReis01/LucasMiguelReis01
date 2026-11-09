@@ -6,7 +6,8 @@ const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const path = require('path');
 
-const FPS = 30, DURATION = 58;
+const FPS = 30;
+const DURATION = require('./timeline.json').duration;   // gerado por audio/narracao_elevenlabs.py
 const OUT = path.join(__dirname, 'green-village-reels.mp4');
 
 (async () => {
@@ -31,7 +32,7 @@ const OUT = path.join(__dirname, 'green-village-reels.mp4');
       ? ['-i', path.join(__dirname, 'audio/mix.wav')]
       : ['-f', 'lavfi', '-i', 'anullsrc=channel_layout=stereo:sample_rate=44100']),
     '-shortest', '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p',
-    '-profile:v', 'high', '-movflags', '+faststart', '-c:a', 'aac', '-b:a', '192k', OUT,
+    '-profile:v', 'high', '-movflags', '+faststart', '-af', 'loudnorm=I=-14:TP=-1:LRA=11', '-c:a', 'aac', '-b:a', '192k', OUT,
   ], { stdio: ['pipe', 'inherit', 'inherit'] });
 
   const total = FPS * DURATION;

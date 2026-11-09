@@ -31,18 +31,18 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 .pad{position:absolute;left:84px;right:84px}
 
 /* ---------- element entrances (explanatory: longer than UI budget) ---------- */
-.up{opacity:0;animation:up .9s var(--ease-out) calc(var(--d)*1s) both}
+.up{opacity:0;animation:up .9s var(--ease-out) calc((var(--s) + var(--d))*1s) both}
 @keyframes up{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
-.fade{opacity:0;animation:fade .9s var(--ease-out) calc(var(--d)*1s) both}
+.fade{opacity:0;animation:fade .9s var(--ease-out) calc((var(--s) + var(--d))*1s) both}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.pop{opacity:0;animation:pop .8s var(--ease-out) calc(var(--d)*1s) both}
+.pop{opacity:0;animation:pop .8s var(--ease-out) calc((var(--s) + var(--d))*1s) both}
 @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
-.wipe{clip-path:inset(0 100% 0 0);animation:wipe 1s var(--ease-in-out) calc(var(--d)*1s) both}
+.wipe{clip-path:inset(0 100% 0 0);animation:wipe 1s var(--ease-in-out) calc((var(--s) + var(--d))*1s) both}
 @keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
-.rise{clip-path:inset(0 0 100% 0);animation:rise 1.1s var(--ease-in-out) calc(var(--d)*1s) both}
+.rise{clip-path:inset(0 0 100% 0);animation:rise 1.1s var(--ease-in-out) calc((var(--s) + var(--d))*1s) both}
 @keyframes rise{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
 .line{height:4px;background:var(--gold);transform-origin:left;transform:scaleX(0);
-  animation:line 1s var(--ease-in-out) calc(var(--d)*1s) both}
+  animation:line 1s var(--ease-in-out) calc((var(--s) + var(--d))*1s) both}
 @keyframes line{to{transform:scaleX(1)}}
 
 /* ---------- type ---------- */
@@ -73,7 +73,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 /* ---------- S4 planta ---------- */
 #s4 .mapwrap{position:absolute;left:0;right:0;top:700px;height:520px;overflow:hidden}
 #s4 .map{position:absolute;left:50%;top:50%;width:1300px;margin-left:-650px;margin-top:-205px;
-  animation:mapmove 9.6s var(--ease-in-out) 21s both}
+  animation:mapmove 9.6s var(--ease-in-out) calc(var(--s)*1s) both}
 @keyframes mapmove{
   0%{transform:translateX(330px) scale(1)}
   45%{transform:translateX(-150px) scale(1)}
@@ -116,9 +116,9 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 <section class="scene" id="s1" style="--s:0;--e:6.4">
   <div class="bg" style="background-image:url(assets/aereo-blur.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.2) 0%,rgba(13,34,25,.0) 40%,rgba(13,34,25,.95) 58%,var(--deep) 100%)"></div>
-  <div class="aereo pop" style="--d:.1"><img src="assets/aereo.jpg"></div>
+  <div class="aereo pop" style="--d:0.1"><img src="assets/aereo.jpg"></div>
   <div class="pad" style="top:1040px">
-    <div class="kicker up" style="--d:.7">Santo Ângelo · Mogi das Cruzes</div>
+    <div class="kicker up" style="--d:0.7">Santo Ângelo · Mogi das Cruzes</div>
     <div class="display rise" style="--d:1.0;font-size:210px;margin-top:26px">Seu terreno</div>
     <div class="display rise gold" style="--d:1.25;font-size:210px">em Mogi.</div>
     <div class="serif up" style="--d:2.1;font-size:54px;font-style:italic;font-weight:500;margin-top:24px">Sem banco. Sem consulta ao Serasa.</div>
@@ -129,43 +129,43 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 <section class="scene" id="s2" style="--s:6;--e:13.4">
   <div class="bg" style="background-image:url(assets/terreno5.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.0) 30%,rgba(13,34,25,.55) 55%,rgba(13,34,25,.96) 78%)"></div>
-  <div class="pad" style="top:250px"><div class="tag fade" style="--d:6.5"><span class="dot"></span>Imagens reais do terreno</div></div>
+  <div class="pad" style="top:250px"><div class="tag fade" style="--d:0.5"><span class="dot"></span>Imagens reais do terreno</div></div>
   <div class="pad" style="top:1060px">
-    <div class="kicker up" style="--d:6.7">O loteamento</div>
-    <div class="serif rise" style="--d:7.0;font-size:120px;margin-top:22px">Green Village I</div>
-    <div class="line" style="--d:7.6;width:220px;margin:34px 0"></div>
-    <div class="body up" style="--d:8.0">Um residencial de baixa densidade, em Mogi das Cruzes, para você construir o seu futuro.</div>
+    <div class="kicker up" style="--d:0.7">O loteamento</div>
+    <div class="serif rise" style="--d:1.0;font-size:120px;margin-top:22px">Green Village I</div>
+    <div class="line" style="--d:1.6;width:220px;margin:34px 0"></div>
+    <div class="body up" style="--d:2.0">Um residencial de baixa densidade, em Mogi das Cruzes, para você construir o seu futuro.</div>
   </div>
 </section>
 
 <!-- S3 · 13–21s · Números -->
 <section class="scene" id="s3" style="--s:13;--e:21.4;background:radial-gradient(120% 70% at 20% 10%,var(--green) 0%,var(--forest) 45%,var(--deep) 100%)">
   <div class="pad" style="top:300px">
-    <div class="kicker up" style="--d:13.4">O projeto em números</div>
-    <div class="serif rise" style="--d:13.6;font-size:96px;margin-top:22px">Pensado para<br>quem quer espaço</div>
+    <div class="kicker up" style="--d:0.4">O projeto em números</div>
+    <div class="serif rise" style="--d:0.6;font-size:96px;margin-top:22px">Pensado para<br>quem quer espaço</div>
   </div>
   <div class="pad grid" style="top:760px">
-    <div class="stat up" style="--d:14.3"><div class="n"><span data-count="39" data-from="0" data-t0="14.4" data-dur="1.6">39</span></div><div class="l">lotes no total</div></div>
-    <div class="stat up" style="--d:14.4"><div class="n"><span data-count="3" data-from="0" data-t0="14.5" data-dur="1.2">3</span></div><div class="l">quadras</div></div>
-    <div class="stat up" style="--d:14.5;grid-column:span 2"><div class="n"><span data-count="250" data-from="0" data-t0="14.6" data-dur="1.8">250</span><small>a</small> 406<small>m²</small></div><div class="l">tamanho de cada lote</div></div>
-    <div class="stat up" style="--d:14.6;grid-column:span 2"><div class="n"><span data-count="14100" data-from="0" data-t0="14.7" data-dur="2" data-fmt="br">14.100</span><small>m²</small></div><div class="l">de área total</div></div>
+    <div class="stat up" style="--d:1.3"><div class="n"><span data-count="39" data-from="0" data-t0="1.4" data-dur="1.6">39</span></div><div class="l">lotes no total</div></div>
+    <div class="stat up" style="--d:1.4"><div class="n"><span data-count="3" data-from="0" data-t0="1.5" data-dur="1.2">3</span></div><div class="l">quadras</div></div>
+    <div class="stat up" style="--d:1.5;grid-column:span 2"><div class="n"><span data-count="250" data-from="0" data-t0="1.6" data-dur="1.8">250</span><small>a</small> 406<small>m²</small></div><div class="l">tamanho de cada lote</div></div>
+    <div class="stat up" style="--d:1.6;grid-column:span 2"><div class="n"><span data-count="14100" data-from="0" data-t0="1.7" data-dur="2" data-fmt="br">14.100</span><small>m²</small></div><div class="l">de área total</div></div>
   </div>
 </section>
 
 <!-- S4 · 21–30s · Planta -->
 <section class="scene" id="s4" style="--s:21;--e:30.4;background:linear-gradient(180deg,var(--deep) 0%,#103425 50%,var(--deep) 100%)">
   <div class="pad" style="top:270px">
-    <div class="kicker up" style="--d:21.4">Escolha o seu</div>
-    <div class="serif rise" style="--d:21.6;font-size:100px;margin-top:22px">Seu lote, do<br>seu jeito</div>
+    <div class="kicker up" style="--d:0.4">Escolha o seu</div>
+    <div class="serif rise" style="--d:0.6;font-size:100px;margin-top:22px">Seu lote, do<br>seu jeito</div>
   </div>
-  <div class="pad legend fade" style="top:600px;--d:22.2">
+  <div class="pad legend fade" style="top:600px;--d:1.2">
     <span><i class="sq" style="background:var(--leaf)"></i>Disponível</span>
     <span><i class="sq" style="background:var(--red)"></i>Vendido</span>
   </div>
-  <div class="mapwrap fade" style="--d:21.8"><img class="map" src="assets/planta.jpg"></div>
+  <div class="mapwrap fade" style="--d:0.8"><img class="map" src="assets/planta.jpg"></div>
   <div class="pad" style="top:1290px;display:flex;align-items:center;gap:36px">
-    <div class="display gold pop" style="--d:25.6;font-size:230px"><span data-count="37" data-from="39" data-t0="25.8" data-dur="1.4">37</span></div>
-    <div class="up" style="--d:25.9">
+    <div class="display gold pop" data-anchor="s4.n37" style="--d:4.6;font-size:230px"><span data-count="37" data-from="39" data-anchor-t0="s4.n37" data-t0="4.8" data-dur="1.4">37</span></div>
+    <div class="up" data-anchor="s4.n37" data-off="0.3" style="--d:4.9">
       <div style="font-size:46px;font-weight:700;line-height:1.15">lotes ainda<br>disponíveis</div>
       <div class="serif" style="font-size:36px;font-style:italic;font-weight:500;color:rgba(246,239,226,.75);margin-top:10px">Os lotes 26 e 27 já foram vendidos.</div>
     </div>
@@ -177,15 +177,15 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
   <div class="bg" style="background-image:url(assets/terreno3.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.92) 0%,rgba(13,34,25,.55) 45%,rgba(13,34,25,.9) 100%)"></div>
   <div class="pad" style="top:270px">
-    <div class="kicker up" style="--d:30.4">Valores</div>
-    <div class="serif rise" style="--d:30.6;font-size:100px;margin-top:22px">Lotes para cada<br>necessidade</div>
+    <div class="kicker up" style="--d:0.4">Valores</div>
+    <div class="serif rise" style="--d:0.6;font-size:100px;margin-top:22px">Lotes para cada<br>necessidade</div>
   </div>
   <div class="pad" style="top:720px">
-    <div class="price up" style="--d:31.3"><span class="m">250 m²</span><span class="v">R$ 70.000</span></div>
-    <div class="price up" style="--d:31.45"><span class="m">320 m²</span><span class="v">R$ 112.000</span></div>
-    <div class="price up" style="--d:31.6"><span class="m">406 m²</span><span class="v">R$ 142.100</span></div>
-    <div class="price entrada pop" style="--d:33.2;margin-top:40px"><span class="m">Entrada de</span><span class="v">R$ 20.000</span></div>
-    <div class="small fade" style="--d:33.8;margin-top:8px">Valores de tabela. Consulte as condições de pagamento.</div>
+    <div class="price up" style="--d:1.3"><span class="m">250 m²</span><span class="v">R$ 70.000</span></div>
+    <div class="price up" style="--d:1.45"><span class="m">320 m²</span><span class="v">R$ 112.000</span></div>
+    <div class="price up" style="--d:1.6"><span class="m">406 m²</span><span class="v">R$ 142.100</span></div>
+    <div class="price entrada pop" data-anchor="s5.entrada" style="--d:3.2;margin-top:40px"><span class="m">Entrada de</span><span class="v">R$ 20.000</span></div>
+    <div class="small fade" data-anchor="s5.entrada" data-off="0.6" style="--d:3.8;margin-top:8px">Valores de tabela. Consulte as condições de pagamento.</div>
   </div>
 </section>
 
@@ -194,14 +194,14 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
   <div class="bg" style="background-image:url(assets/terreno4.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.94) 0%,rgba(13,34,25,.6) 45%,rgba(13,34,25,.85) 100%)"></div>
   <div class="pad" style="top:270px">
-    <div class="kicker up" style="--d:38.4">Condições</div>
-    <div class="serif rise" style="--d:38.6;font-size:100px;margin-top:22px">Facilidade para<br>você fechar</div>
+    <div class="kicker up" style="--d:0.4">Condições</div>
+    <div class="serif rise" style="--d:0.6;font-size:100px;margin-top:22px">Facilidade para<br>você fechar</div>
   </div>
   <div class="pad" style="top:720px">
-    <div class="check up" style="--d:39.4"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Direto com os proprietários</div></div>
-    <div class="check up" style="--d:40.3"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Sem consulta ao Serasa<em>e sem aprovação bancária</em></div></div>
-    <div class="check up" style="--d:41.2"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Entrada facilitada<em>e parcelas que cabem no bolso</em></div></div>
-    <div class="check up" style="--d:42.1"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Carro ou moto na entrada*<em>mediante avaliação</em></div></div>
+    <div class="check up" data-anchor="s6.c1" style="--d:1.4"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Direto com os proprietários</div></div>
+    <div class="check up" data-anchor="s6.c2" style="--d:2.3"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Sem consulta ao Serasa<em>e sem aprovação bancária</em></div></div>
+    <div class="check up" data-anchor="s6.c3" style="--d:3.2"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Entrada facilitada<em>e parcelas que cabem no bolso</em></div></div>
+    <div class="check up" data-anchor="s6.c4" style="--d:4.1"><div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f6efe2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="t">Carro ou moto na entrada*<em>mediante avaliação</em></div></div>
   </div>
 </section>
 
@@ -210,36 +210,54 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
   <div class="bg" style="background-image:url(assets/terreno2-blur.jpg)"></div>
   <div class="shade" style="background:rgba(13,34,25,.55)"></div>
   <div class="pad" style="top:560px">
-    <div class="kicker up" style="--d:46.4">Tranquilidade</div>
-    <div class="serif rise" style="--d:46.6;font-size:104px;margin-top:22px">Documentação<br>completa e cópia<br>de tudo na<br><span class="gold">sua mão.</span></div>
-    <div class="line" style="--d:47.6;width:220px;margin:40px 0"></div>
-    <div class="body up" style="--d:47.9">A cadeia sucessória do terreno está completa. Ao fechar negócio, você vem ao escritório, vê os documentos e leva uma cópia de todos.</div>
+    <div class="kicker up" style="--d:0.4">Tranquilidade</div>
+    <div class="serif rise" style="--d:0.6;font-size:104px;margin-top:22px">Documentação<br>completa e cópia<br>de tudo na<br><span class="gold">sua mão.</span></div>
+    <div class="line" style="--d:1.6;width:220px;margin:40px 0"></div>
+    <div class="body up" style="--d:1.9">A cadeia sucessória do terreno está completa. Ao fechar negócio, você vem ao escritório, vê os documentos e leva uma cópia de todos.</div>
   </div>
 </section>
 
 <!-- S8 · 51–58s · CTA -->
 <section class="scene" id="s8" style="--s:51;--e:99;background:radial-gradient(120% 80% at 80% 0%,var(--green) 0%,var(--forest) 50%,var(--deep) 100%)">
   <div class="pad" style="top:330px">
-    <div class="brand pop" style="--d:51.4"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
-    <div class="serif rise" style="--d:51.8;font-size:116px;margin-top:60px">Qual lote<br>combina com<br><span class="gold">você?</span></div>
-    <div class="body up" style="--d:52.6;margin-top:30px">Chame no WhatsApp e receba a tabela completa.</div>
-    <div class="wa pop" style="--d:53.2;margin-top:56px">
+    <div class="brand pop" style="--d:0.1"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
+    <div class="serif rise" style="--d:0.3;font-size:116px;margin-top:60px">Qual lote<br>combina com<br><span class="gold">você?</span></div>
+    <div class="body up" style="--d:0.6;margin-top:30px">Chame no WhatsApp e receba a tabela completa.</div>
+    <div class="wa pop" data-anchor="s8.wa" style="--d:2.2;margin-top:56px">
       <svg width="86" height="86" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#1b6b45"/><path fill="#f6efe2" d="M16.9 14.1c-.3-.1-1.6-.8-1.8-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.5-1.4-1.8-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 2.9 4.6 4.1 2.3.9 2.7.7 3.2.7.5-.1 1.6-.7 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z"/></svg>
       <div><div class="k">CHAME NO WHATSAPP</div><div class="t">(11) 93700-4295</div></div>
     </div>
-    <div class="up" style="--d:53.8;margin-top:40px;font-size:42px;font-weight:600">@reis_imoveisofc</div>
+    <div class="up" data-anchor="s8.wa" data-off="0.6" style="--d:2.8;margin-top:40px;font-size:42px;font-weight:600">@reis_imoveisofc</div>
   </div>
-  <div class="pad small fade" style="--d:54.4;top:1560px;font-size:22px">*Veículo mediante avaliação. Condições sujeitas à negociação e formalização contratual. Imagem aérea e planta ilustrativas, sem escala.</div>
+  <div class="pad small fade" style="--d:2.4;top:1560px;font-size:22px">*Veículo mediante avaliação. Condições sujeitas à negociação e formalização contratual. Imagem aérea e planta ilustrativas, sem escala.</div>
 </section>
 
 </div>
+<script src="timeline.js"></script>
 <script>
 const nf = new Intl.NumberFormat('pt-BR');
 const easeOut = t => 1 - Math.pow(1 - t, 3);
+function applyTimeline(tl) {
+  if (!tl) return;
+  tl.scenes.forEach((sc, i) => {
+    const el = document.getElementById('s' + (i + 1));
+    el.style.setProperty('--s', sc.start);
+    el.style.setProperty('--e', i === tl.scenes.length - 1 ? 999 : sc.end);
+  });
+  for (const el of document.querySelectorAll('[data-anchor]')) {
+    const a = tl.anchors[el.dataset.anchor]; if (a == null) continue;
+    el.style.setProperty('--d', Math.max(0, a - 0.15 + (+el.dataset.off || 0)).toFixed(2));
+  }
+  for (const el of document.querySelectorAll('[data-anchor-t0]')) {
+    const a = tl.anchors[el.dataset.anchorT0]; if (a != null) el.dataset.t0 = Math.max(0, a - 0.9).toFixed(2);
+  }
+}
+applyTimeline(window.TIMELINE);
+const sceneStart = el => +getComputedStyle(el.closest('section')).getPropertyValue('--s');
 window.seek = (t) => {
   for (const a of document.getAnimations()) { a.pause(); a.currentTime = t * 1000; }
   for (const el of document.querySelectorAll('[data-count]')) {
-    const to = +el.dataset.count, from = +el.dataset.from, t0 = +el.dataset.t0, dur = +el.dataset.dur;
+    const to = +el.dataset.count, from = +el.dataset.from, t0 = sceneStart(el) + +el.dataset.t0, dur = +el.dataset.dur;
     const p = Math.min(1, Math.max(0, (t - t0) / dur));
     const v = Math.round(from + (to - from) * easeOut(p));
     el.textContent = el.dataset.fmt === 'br' ? nf.format(v) : v;

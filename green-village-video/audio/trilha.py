@@ -1,9 +1,15 @@
 # Sintetiza trilha instrumental + efeitos sonoros sincronizados com as animações
-# e mixa com a narração (ducking). Saída: mix.wav (44.1 kHz, estéreo, 58 s).
-import numpy as np, soundfile as sf
+# e mixa com a narração (ducking). Tempos vêm de ../timeline.json (gerado pela narração).
+# Saída: mix.wav (44.1 kHz, estéreo).
+import json, os, numpy as np, soundfile as sf
 from scipy.signal import fftconvolve, butter, sosfilt, resample_poly
 
-SR, DUR = 44100, 58.0
+TL = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'timeline.json')))
+SC = [s['start'] for s in TL['scenes']]          # início de cada cena
+ANC = TL['anchors']
+def rt(scene, rel): return SC[scene - 1] + rel     # cena 1..8, tempo relativo
+def anc(name): return rt(int(name[1]), ANC[name]) - 0.15
+SR, DUR = 44100, TL['duration']
 N = int(SR * DUR)
 rng = np.random.default_rng(7)
 BEAT = 60 / 96          # 96 BPM
@@ -36,11 +42,11 @@ music = np.zeros((N, 2))
 pad = np.zeros((N, 2)); bass = np.zeros((N, 2)); arp = np.zeros((N, 2)); drums = np.zeros((N, 2))
 
 def section_on(t, part):
-    # arranjo: intro só pad; entra baixo/kick em 6s; arpejo em 13s; hats em 21s;
-    # respiro (só pad) 46–51; volta tudo em 51; final 56.5 acorde sustentado
+    # arranjo: intro só pad; baixo/kick na cena 2; arpejo na 3; hats na 4;
+    # respiro (só pad) na cena 7; volta tudo na 8; acorde final sustentado
     if part == 'pad': return True
-    if 46 <= t < 51 or t >= 56.5: return False
-    return {'bass': t >= 6, 'kick': t >= 6, 'arp': t >= 13, 'hat': t >= 21}[part]
+    if SC[6] <= t < SC[7] or t >= DUR - 1.5: return False
+    return {'bass': t >= SC[1], 'kick': t >= SC[1], 'arp': t >= SC[2], 'hat': t >= SC[3]}[part]
 
 nchord = int(DUR / (BAR * 2)) + 1
 for i in range(nchord):
@@ -88,7 +94,7 @@ while b < DUR:
 pad *= duck_kick[:, None]
 music = reverb(pad + arp, 2.6, 0.35) + bass + drums
 # acorde final + fade
-fade = np.ones(N); fs = int(56.8 * SR); fade[fs:] = np.linspace(1, 0, N - fs) ** 1.5
+fade = np.ones(N); fs = int((DUR - 1.2) * SR); fade[fs:] = np.linspace(1, 0, N - fs) ** 1.5
 fade[: int(0.8 * SR)] = np.linspace(0, 1, int(0.8 * SR))
 music *= fade[:, None]
 
@@ -118,31 +124,33 @@ def impact():
                           + lp(rng.standard_normal(len(tt)), 900) * np.exp(-tt * 9) * 0.5)
 
 # transições de cena
-for i, t in enumerate([6, 13, 21, 30, 38, 46]):
+for i, t in enumerate(SC[1:7]):
     add(sfx, whoosh(0.8), t - 0.4, 0.16, pan=-0.5 if i % 2 else 0.5)
 add(sfx, whoosh(1.2), 0.0, 0.18)
 # títulos revelados (whoosh curto e suave)
-for t in [1.0, 7.0, 13.6, 21.6, 30.6, 38.6, 46.6, 51.8]:
+for t in [1.0] + [s + 0.6 for s in SC[1:7]] + [SC[7] + 0.3]:
     add(sfx, whoosh(0.45, up=False), t, 0.09)
 # itens que aparecem (pop)
-for t, f in [(0.7, 988), (2.1, 880), (6.5, 988), (7.6, 1175), (13.4, 988), (22.2, 1175),
-             (14.3, 784), (14.4, 880), (14.5, 988), (14.6, 1175),
-             (31.3, 784), (31.45, 880), (31.6, 988), (53.8, 1175), (51.4, 880)]:
+for t, f in [(rt(1, .7), 988), (rt(1, 2.1), 880), (rt(2, .5), 988), (rt(2, 1.6), 1175), (rt(3, .4), 988),
+             (rt(4, 1.2), 1175), (rt(3, 1.3), 784), (rt(3, 1.4), 880), (rt(3, 1.5), 988), (rt(3, 1.6), 1175),
+             (rt(5, 1.3), 784), (rt(5, 1.45), 880), (rt(5, 1.6), 988), (anc('s8.wa') + .6, 1175), (rt(8, .1), 880)]:
     add(sfx, pop(f), t + 0.05, 0.16)
 # checks em escada ascendente
-for t, f in zip([39.4, 40.3, 41.2, 42.1], [784, 880, 988, 1175]):
+for t, f in zip([anc(f's6.c{i}') for i in range(1, 5)], [784, 880, 988, 1175]):
     add(sfx, pop(f), t + 0.05, 0.2); add(sfx, bell(f * 2, 0.6), t + 0.12, 0.05)
 # contadores: ticks durante a contagem + sino ao final
-for t0, dur in [(14.4, 1.6), (14.7, 2.0), (25.8, 1.4)]:
+N37 = anc('s4.n37') + 0.15
+for t0, dur in [(rt(3, 1.4), 1.6), (rt(3, 1.7), 2.0), (N37 - 0.9, 1.4)]:
     for k in range(10):
         add(sfx, tick(), t0 + dur * (1 - (1 - k / 10) ** 0.5) * 0.9, 0.08, pan=0.2)
-for t, f in [(16.7, 1318.5), (27.2, 1174.7), (25.6, 1568)]:
+for t, f in [(rt(3, 3.7), 1318.5), (N37 + 0.5, 1174.7), (N37 - 0.15, 1568)]:
     add(sfx, bell(f), t, 0.12)
 # entrada R$ 20.000 e WhatsApp
-add(sfx, bell(1568), 33.2, 0.16); add(sfx, bell(1975.5), 33.32, 0.1)
-add(sfx, bell(1318.5), 53.2, 0.16); add(sfx, bell(1975.5), 53.32, 0.1)
+E, W = anc('s5.entrada'), anc('s8.wa')
+add(sfx, bell(1568), E, 0.16); add(sfx, bell(1975.5), E + 0.12, 0.1)
+add(sfx, bell(1318.5), W, 0.16); add(sfx, bell(1975.5), W + 0.12, 0.1)
 # subida para o final + impacto
-add(sfx, riser(1.6), 49.4, 0.16); add(sfx, impact(), 51.0, 0.45)
+add(sfx, riser(1.6), SC[7] - 1.6, 0.16); add(sfx, impact(), SC[7], 0.45)
 add(sfx, impact(), 0.05, 0.3)
 sfx = reverb(sfx, 1.4, 0.2)
 
@@ -150,9 +158,8 @@ sfx = reverb(sfx, 1.4, 0.2)
 vo, vsr = sf.read('narracao.wav')
 vo = resample_poly(vo, SR, vsr)[:N]; vo = np.pad(vo, (0, N - len(vo)))
 vo = hp(vo, 90)
-# leve compressão/realce de presença
-vo = np.tanh(vo * 1.6) / np.tanh(1.6)
-vo += 0.15 * bp(vo, 2500, 6000)
+# voz da ElevenLabs já vem tratada: só um leve realce de presença
+vo += 0.08 * bp(vo, 2500, 6000)
 # ducking da música: envelope da voz
 envv = np.convolve(np.abs(vo), np.ones(int(0.15 * SR)) / int(0.15 * SR), 'same')
 duck = 1 - 0.55 * np.clip(envv / (envv.max() * 0.25), 0, 1)
