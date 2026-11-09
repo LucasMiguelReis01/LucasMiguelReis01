@@ -149,6 +149,9 @@ for t, f in [(rt(3, 3.7), 1318.5), (N37 + 0.5, 1174.7), (N37 - 0.15, 1568)]:
 E, W = anc('s5.entrada'), anc('s8.wa')
 add(sfx, bell(1568), E, 0.16); add(sfx, bell(1975.5), E + 0.12, 0.1)
 add(sfx, bell(1318.5), W, 0.16); add(sfx, bell(1975.5), W + 0.12, 0.1)
+# chamadas para o comentário fixado
+for t in (anc('s4.cmt'), W + 1.4):
+    add(sfx, pop(1175), t + 0.05, 0.2); add(sfx, bell(2349.3, 0.9), t + 0.1, 0.08)
 # subida para o final + impacto
 add(sfx, riser(1.6), SC[7] - 1.6, 0.16); add(sfx, impact(), SC[7], 0.45)
 add(sfx, impact(), 0.05, 0.3)

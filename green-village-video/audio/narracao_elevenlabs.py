@@ -17,7 +17,7 @@ VOICE = sys.argv[1] if len(sys.argv) > 1 else 'LqFVmWbm4eksPPIUSMaE'  # "Leão R
 MODEL = 'eleven_multilingual_v2'
 SPEED = 1.05
 SR = 44100
-LEAD, TAIL = 0.5, 0.55          # respiro antes/depois da fala em cada cena
+LEAD, TAIL = 0.5, 0.4           # respiro antes/depois da fala em cada cena
 MAX_TOTAL = 59.5
 
 # (texto, duração mínima da cena, âncoras {nome: trecho falado}, ocorrência a partir de)
@@ -25,8 +25,8 @@ SCENES = [
     ("Seu terreno em Mogi das Cruzes. Sem banco, e sem consulta ao Serasa.", 4.0, {}),
     ("Conheça o Green Village um, um residencial pra você construir o seu futuro.", 4.0, {}),
     ("São trinta e nove lotes, de duzentos e cinquenta a quatrocentos e seis metros quadrados.", 5.0, {}),
-    ("Escolha o seu lote na planta. Quatro já foram vendidos, e restam só trinta e cinco!", 6.0,
-     {'s4.n37': 'trinta e cinco'}),
+    ("Escolha o seu lote na planta. Quatro já foram vendidos, e restam só trinta e cinco. Quais? Tá no comentário fixado!", 6.0,
+     {'s4.n37': 'trinta e cinco', 's4.cmt': 'comentário'}),
     ("Lotes a partir de setenta mil reais, com entrada de vinte mil.", 4.5, {'s5.entrada': 'entrada'}),
     ("Direto com os proprietários, sem banco, e com parcelas que cabem no bolso. E dá pra usar carro ou moto na entrada.", 5.5,
      {'s6.c1': 'Direto', 's6.c2': 'sem banco', 's6.c3': 'parcelas', 's6.c4': 'carro'}),
@@ -34,7 +34,7 @@ SCENES = [
     ("Chama no WhatsApp: onze, nove três sete zero zero, quatro dois nove cinco.", 6.0,
      {'s8.wa': 'WhatsApp'}),
 ]
-CTA_HOLD = 1.8                   # tempo extra no final com o contato na tela
+CTA_HOLD = 1.5                   # tempo extra no final com o contato na tela
 
 def tts(text, prev, nxt):
     key = hashlib.sha1(json.dumps([VOICE, MODEL, SPEED, text, prev, nxt]).encode()).hexdigest()[:16]
