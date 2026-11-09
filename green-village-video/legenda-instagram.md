@@ -36,9 +36,9 @@ Mas atenção: já foram 4 vendidos e restam só 35 lotes. 🔥
 🔴 JÁ VENDIDOS: 3, 5, 26 e 27
 
 💰 VALORES
-• 250 m² → R$ 70.000
-• 320 m² → R$ 112.000
-• 406 m² → R$ 142.100
+• 250 m² → a partir de R$ 70.000
+• 320 m² → a partir de R$ 112.000
+• 406 m² → a partir de R$ 142.100
 • Entrada de R$ 20.000
 
 ✅ Direto com os proprietários
