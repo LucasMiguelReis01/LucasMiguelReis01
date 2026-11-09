@@ -30,7 +30,7 @@ SCENES = [
     ("Lotes a partir de setenta mil reais, com entrada de vinte mil.", 4.5, {'s5.entrada': 'entrada'}),
     ("Direto com os proprietários, sem banco, e com parcelas que cabem no bolso. E dá pra usar carro ou moto na entrada.", 5.5,
      {'s6.c1': 'Direto', 's6.c2': 'sem banco', 's6.c3': 'parcelas', 's6.c4': 'carro'}),
-    ("Terreno com procedência, documentação completa, e cópia de tudo na sua mão.", 3.5, {}),
+    ("Terreno com procedência, e cópia de tudo na sua mão.", 3.5, {}),
     ("Chama no WhatsApp: onze, nove três sete zero zero, quatro dois nove cinco.", 6.0,
      {'s8.wa': 'WhatsApp'}),
 ]
