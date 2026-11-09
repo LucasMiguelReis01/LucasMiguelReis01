@@ -107,16 +107,29 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
   border-radius:999px;padding:34px 56px 34px 40px}
 .wa .t{font-family:'Bebas Neue';font-size:96px;line-height:1}
 .wa .k{font-size:24px;font-weight:700;letter-spacing:.2em;color:var(--green)}
+
+/* ---------- marca d'água ---------- */
+.wm{position:absolute;pointer-events:none;display:flex;align-items:center}
+.wm-corner{z-index:50}
+.wm-corner{right:48px;top:150px;gap:14px;opacity:.62;padding:10px 22px 10px 10px;border-radius:999px;
+  background:rgba(13,34,25,.35);border:1px solid rgba(246,239,226,.25)}
+.wm-corner img{width:58px;height:58px;border-radius:50%;border:2px solid var(--gold)}
+.wm-corner b{font-size:22px;letter-spacing:.16em;font-weight:700;color:var(--cream)}
+.wm-center{left:50%;top:50%;flex-direction:column;gap:22px;transform:translate(-50%,-50%) rotate(-18deg);opacity:.13}
+.wm-center img{width:300px;height:300px;border-radius:50%;filter:grayscale(1) brightness(1.6)}
+.wm-center b{font-size:88px;letter-spacing:.2em;font-weight:700;color:#fff;white-space:nowrap}
 </style>
 </head>
 <body>
 <div id="stage">
+<div class="wm wm-corner"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
 
 <!-- S1 · 0–6s · Gancho -->
 <section class="scene" id="s1" style="--s:0;--e:6.4">
   <div class="bg" style="background-image:url(assets/aereo-blur.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.2) 0%,rgba(13,34,25,.0) 40%,rgba(13,34,25,.95) 58%,var(--deep) 100%)"></div>
   <div class="aereo pop" style="--d:0.1"><img src="assets/aereo.jpg"></div>
+  <div class="wm wm-center" style="top:630px;opacity:.24"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:1040px">
     <div class="kicker up" style="--d:0.7">Santo Ângelo · Mogi das Cruzes</div>
     <div class="display rise" style="--d:1.0;font-size:210px;margin-top:26px">Seu terreno</div>
@@ -129,6 +142,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 <section class="scene" id="s2" style="--s:6;--e:13.4">
   <div class="bg" style="background-image:url(assets/terreno5.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.0) 30%,rgba(13,34,25,.55) 55%,rgba(13,34,25,.96) 78%)"></div>
+  <div class="wm wm-center" style="opacity:.19"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:250px"><div class="tag fade" style="--d:0.5"><span class="dot"></span>Imagens reais do terreno</div></div>
   <div class="pad" style="top:1060px">
     <div class="kicker up" style="--d:0.7">O loteamento</div>
@@ -140,6 +154,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 
 <!-- S3 · 13–21s · Números -->
 <section class="scene" id="s3" style="--s:13;--e:21.4;background:radial-gradient(120% 70% at 20% 10%,var(--green) 0%,var(--forest) 45%,var(--deep) 100%)">
+  <div class="wm wm-center"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:300px">
     <div class="kicker up" style="--d:0.4">O projeto em números</div>
     <div class="serif rise" style="--d:0.6;font-size:96px;margin-top:22px">Pensado para<br>quem quer espaço</div>
@@ -163,6 +178,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
     <span><i class="sq" style="background:var(--red)"></i>Vendido</span>
   </div>
   <div class="mapwrap fade" style="--d:0.8"><img class="map" src="assets/planta.jpg"></div>
+  <div class="wm wm-center" style="top:960px"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:1290px;display:flex;align-items:center;gap:36px">
     <div class="display gold pop" data-anchor="s4.n37" style="--d:4.6;font-size:230px"><span data-count="37" data-from="39" data-anchor-t0="s4.n37" data-t0="4.8" data-dur="1.4">37</span></div>
     <div class="up" data-anchor="s4.n37" data-off="0.3" style="--d:4.9">
@@ -176,6 +192,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 <section class="scene" id="s5" style="--s:30;--e:38.4">
   <div class="bg" style="background-image:url(assets/terreno3.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.92) 0%,rgba(13,34,25,.55) 45%,rgba(13,34,25,.9) 100%)"></div>
+  <div class="wm wm-center" style="opacity:.19"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:270px">
     <div class="kicker up" style="--d:0.4">Valores</div>
     <div class="serif rise" style="--d:0.6;font-size:100px;margin-top:22px">Lotes para cada<br>necessidade</div>
@@ -193,6 +210,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 <section class="scene" id="s6" style="--s:38;--e:46.4">
   <div class="bg" style="background-image:url(assets/terreno4.jpg)"></div>
   <div class="shade" style="background:linear-gradient(180deg,rgba(13,34,25,.94) 0%,rgba(13,34,25,.6) 45%,rgba(13,34,25,.85) 100%)"></div>
+  <div class="wm wm-center" style="opacity:.19"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:270px">
     <div class="kicker up" style="--d:0.4">Condições</div>
     <div class="serif rise" style="--d:0.6;font-size:100px;margin-top:22px">Facilidade para<br>você fechar</div>
@@ -209,6 +227,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--deep);colo
 <section class="scene" id="s7" style="--s:46;--e:51.4">
   <div class="bg" style="background-image:url(assets/terreno2-blur.jpg)"></div>
   <div class="shade" style="background:rgba(13,34,25,.55)"></div>
+  <div class="wm wm-center"><img src="assets/leao.png"><b>REIS IMÓVEIS</b></div>
   <div class="pad" style="top:560px">
     <div class="kicker up" style="--d:0.4">Tranquilidade</div>
     <div class="serif rise" style="--d:0.6;font-size:104px;margin-top:22px">Documentação<br>completa e cópia<br>de tudo na<br><span class="gold">sua mão.</span></div>
