@@ -16,7 +16,7 @@ Atualize aqui quando mudar conta, empreendimento ou metas.
 ## Perfil do negócio (o Gestor pergunta o que estiver _pendente_ e preenche aqui)
 - Ticket médio do que vende: lotes a partir de R$ 70 mil (Green Village I).
 - Objetivo dos anúncios: mensagem no WhatsApp / direct. _(confirmar se também quer formulário)_
-- Investimento mensal em anúncios: _pendente_
+- Investimento em anúncios: R$ 50 para começar (teste inicial, nov/2026). Prefere gastar pouco.
 - Meta de custo por lead (quanto aceita pagar por contato): _pendente_
 - A conta de anúncios já foi bloqueada alguma vez? _pendente_
 - CRECI (para identificação nos anúncios, se quiser): _pendente_
