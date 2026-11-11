@@ -17,7 +17,7 @@ certa e devolve uma resposta só: RESUMO · O QUE FAZER AGORA · O QUE EU PREPAR
 | `trafego-relatorios` | Rex 📋 | Relatório semanal, mensal, resumo executivo |
 | `trafego-copy` | Ada ✍️ | Textos de anúncio em 3 versões |
 | `trafego-video` | Léo 🎬 | Ganchos e roteiros de Reels |
-| `trafego-compliance` | Vera 🛡️ | Revisa tudo antes de ir ao ar; corrige reprovados |
+| `trafego-compliance` | Vera 🛡️ | Compliance em 4 camadas (regras gerais, nichos + imóveis, segmentação, saúde da conta) |
 
 O Gestor é uma *skill* (e não um agente) porque no Claude Code um subagente não pode chamar
 outros subagentes — só a conversa principal pode coordenar o time.
