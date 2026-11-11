@@ -13,6 +13,14 @@ Atualize aqui quando mudar conta, empreendimento ou metas.
 - **Canal de conversão:** WhatsApp (11) 93700-4295 e direct do Instagram ("comenta EU QUERO").
 - **Material existente:** vídeo Reels em `green-village-video/` (`green-village-reels.mp4`).
 
+## Perfil do negócio (o Gestor pergunta o que estiver _pendente_ e preenche aqui)
+- Ticket médio do que vende: lotes a partir de R$ 70 mil (Green Village I).
+- Objetivo dos anúncios: mensagem no WhatsApp / direct. _(confirmar se também quer formulário)_
+- Investimento mensal em anúncios: _pendente_
+- Meta de custo por lead (quanto aceita pagar por contato): _pendente_
+- A conta de anúncios já foi bloqueada alguma vez? _pendente_
+- CRECI (para identificação nos anúncios, se quiser): _pendente_
+
 ## Contas Meta Ads (via conector Meta — sem token, sem .env)
 | Conta | ID | Observação |
 |---|---|---|

@@ -30,6 +30,6 @@ ANÁLISE DE CRIATIVOS — [data]
 ⚠️ SATURADOS  — nome · o que mudou · trocar esta semana
 ❌ RUINS      — nome · gasto sem resultado · pausar
 PRÓXIMOS CRIATIVOS — padrões vencedores (gancho, formato, ângulo: preço, sem Serasa,
-entrada com veículo, escassez de lotes) → repasse para trafego-copy / trafego-diretor-video
+entrada com veículo, escassez de lotes) → repasse para trafego-copy / trafego-video
 ```
 Não pause nada: recomende e deixe a execução para `trafego-orcamento` com aprovação do Lucas.

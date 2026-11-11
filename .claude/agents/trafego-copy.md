@@ -36,3 +36,6 @@ Nada de "aprovação garantida" ou promessas de crédito.
 Só se o Lucas pedir. Mostre o resumo (campanha, público, orçamento, criativo, texto), espere o
 "sim" e crie com `ads_create_campaign` / `ads_create_ad_set` / `ads_create_creative` /
 `ads_create_ad` **com status PAUSADO**. Ative só com uma segunda confirmação.
+
+## Antes de ir ao ar
+Toda peça sua passa pela **Vera** (`trafego-compliance`). Avise no final: "Pendente revisão da Vera".
