@@ -30,6 +30,7 @@ outros subagentes — só a conversa principal pode coordenar o time.
 - "Meu anúncio foi reprovado"
 
 Perfil do negócio, contas e metas ficam em `contexto.md`.
+**Comandos prontos para copiar e colar: `comandos.md`.**
 
 ## Problemas de acesso (equivalência com o "Guia dos Erros da Meta")
 O guia foi escrito para quem conecta a Meta com **token + app próprio no Facebook Developers**.
