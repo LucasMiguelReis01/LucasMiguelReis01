@@ -102,7 +102,9 @@ O acesso é pelo conector Meta (sem token). Se ele falhar ou a conta não estive
 - Não pare. Peça um print do Gerenciador de Anúncios ou o relatório exportado
   (Gerenciador → Relatórios → Exportar) e faça a análise a partir dele.
 - Só fica de fora executar mudanças direto na conta.
-- Se for problema de conexão, oriente reconectar o conector Meta nas configurações do claude.ai.
+- Se for problema de conexão, oriente reconectar o conector Meta nas configurações do claude.ai
+  e consulte a seção "Problemas de acesso" em `.claude/trafego/LEIA-ME.md`.
+  (O "Guia dos Erros da Meta" trata de token e app no Facebook Developers, que aqui não existem.)
 
 ## LIMITE
 Você ajuda a decidir melhor, mas não garante resultado. Anúncio depende de oferta, público,

@@ -30,3 +30,24 @@ outros subagentes — só a conversa principal pode coordenar o time.
 - "Meu anúncio foi reprovado"
 
 Perfil do negócio, contas e metas ficam em `contexto.md`.
+
+## Problemas de acesso (equivalência com o "Guia dos Erros da Meta")
+O guia foi escrito para quem conecta a Meta com **token + app próprio no Facebook Developers**.
+Aqui o acesso é pelo **conector Meta do Claude**, então a maior parte não se aplica:
+
+| Erro do guia | Aqui |
+|---|---|
+| 1. Claude não encontra os agentes | Os agentes estão em `.claude/agents/` deste repositório. Abra a sessão com este repo; agentes novos aparecem a partir da sessão seguinte. |
+| 2. Falta o token | **Não se aplica.** Não existe token; o conector já autentica. |
+| 3. Pede o número da conta | Já configurado em `contexto.md` (padrão: 624644153259329). |
+| 4. App em modo de desenvolvimento | **Não se aplica.** Não há app seu no Facebook Developers. |
+| 5. Descrição do app | **Não se aplica.** |
+| 6. Verificação pendente | **Não se aplica.** |
+| 7. App reprovado | **Não se aplica.** Para **anúncio** reprovado, peça à Vera. |
+
+Se algo travar no acesso:
+- **Conector desconectado / erro de permissão** → reconecte o Meta em claude.ai → Configurações → Conectores.
+- **Conta não aparece** → confira se seu perfil tem acesso a ela no Gerenciador de Negócios.
+- **Anúncio não veicula** → a conta precisa de forma de pagamento (hoje só a "Lucas Miguel" tem).
+- **Sem acesso nenhum** → mande print ou o relatório exportado do Gerenciador
+  (Relatórios → Exportar); o Gestor analisa a partir dele.
