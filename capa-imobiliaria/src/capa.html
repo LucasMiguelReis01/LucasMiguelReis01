@@ -19,10 +19,14 @@ const params = new URLSearchParams(location.search);
 const variant = params.get("v") || "retrato";
 
 // Paleta
-const PAPER = "#F1ECE2";
-const INK   = "#1E2B26";   // verde-floresta quase negro
-const BRASS = "#A6824E";   // latão envelhecido
-const MUTED = "#6F7A72";
+const DARK = params.get("t") === "escuro";
+const PAPER = DARK ? "#16231E" : "#F1ECE2";   // verde-floresta profundo | marfim
+const INK   = DARK ? "#DCC9A0" : "#1E2B26";   // champanhe | verde quase negro
+const BRASS = DARK ? "#C59A55" : "#A6824E";   // ouro velho | latão envelhecido
+const VIG   = DARK ? "#0A120F" : "#D9D0BF";
+const GRAIN = DARK ? "0 0 0 0 0.92  0 0 0 0 0.86  0 0 0 0 0.72  0 0 0 0.07 0"
+                   : "0 0 0 0 0.12  0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0.09 0";
+document.documentElement.style.background = PAPER;
 
 const NAME    = "REIS";
 const SUB     = "IMÓVEIS";
@@ -89,11 +93,11 @@ function label(x, y, t, size, anchor = "middle", spacing = "0.42em", color = INK
 const grain = `
   <filter id="grain" x="0" y="0" width="100%" height="100%">
     <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="7" stitchTiles="stitch"/>
-    <feColorMatrix values="0 0 0 0 0.12  0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0.09 0"/>
+    <feColorMatrix values="${GRAIN}"/>
   </filter>
   <radialGradient id="vig" cx="50%" cy="45%" r="75%">
     <stop offset="60%" stop-color="${PAPER}" stop-opacity="0"/>
-    <stop offset="100%" stop-color="#D9D0BF" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="${VIG}" stop-opacity="${DARK ? 0.7 : 0.55}"/>
   </radialGradient>`;
 
 // Espaçamento tipográfico: compensa o tracking final no centro
