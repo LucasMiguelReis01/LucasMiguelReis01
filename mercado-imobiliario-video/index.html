@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mercado Imobiliário Virou</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@500;600;700;800;900&display=block" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b1a; --bg2:#0e1633; --ink:#f4f6ff; --mute:#8d97bd;
+  --yel:#ffd23f; --grn:#2ee59d; --red:#ff4d5e; --blu:#4da3ff;
+  --out:cubic-bezier(.16,1,.3,1); --back:cubic-bezier(.34,1.56,.64,1); --io:cubic-bezier(.77,0,.175,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+  background:radial-gradient(120% 70% at 50% 25%,#16224d 0%,var(--bg2) 40%,var(--bg) 80%)}
+
+/* ---------- fundo vivo ---------- */
+.grid{position:absolute;inset:-200px;opacity:.16;
+  background-image:linear-gradient(#4da3ff 1px,transparent 1px),linear-gradient(90deg,#4da3ff 1px,transparent 1px);
+  background-size:90px 90px;transform:perspective(900px) rotateX(58deg) translateY(300px);
+  animation:gridmove 3s linear infinite}
+@keyframes gridmove{to{background-position:0 90px}}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;animation:orb 14s ease-in-out infinite alternate}
+@keyframes orb{to{transform:translate(160px,120px) scale(1.25)}}
+.dot{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--yel);opacity:.0;animation:float 7s linear infinite}
+@keyframes float{0%{opacity:0;transform:translateY(0)}15%{opacity:.7}100%{opacity:0;transform:translateY(-700px)}}
+.skyline{position:absolute;left:0;bottom:0;width:1080px;height:520px;opacity:.55}
+.bottomfade{position:absolute;left:0;right:0;bottom:0;height:760px;background:linear-gradient(transparent,rgba(7,11,26,.85) 55%,#070b1a)}
+
+/* ---------- topo fixo ---------- */
+#top{position:absolute;left:60px;right:60px;top:56px;z-index:20}
+.bars{display:flex;gap:10px}
+.seg{flex:1;height:8px;border-radius:8px;background:rgba(255,255,255,.18);overflow:hidden}
+.seg i{display:block;height:100%;background:var(--yel);transform-origin:left;transform:scaleX(0);
+  animation:fill linear calc(var(--d)*1s) both;animation-duration:calc(var(--len)*1s)}
+@keyframes fill{to{transform:scaleX(1)}}
+.tag{margin-top:22px;display:flex;align-items:center;gap:14px;font-weight:800;font-size:26px;letter-spacing:.18em;color:var(--mute)}
+.live{width:14px;height:14px;border-radius:50%;background:var(--red);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:.2}}
+
+/* ---------- cenas ---------- */
+.scene{position:absolute;inset:0;opacity:0;z-index:5;
+  animation:sIn .35s var(--out) calc(var(--s)*1s) both,sOut .3s ease calc(var(--e)*1s - .3s) forwards}
+@keyframes sIn{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:none}}
+@keyframes sOut{to{opacity:0;transform:scale(.94)}}
+.safe{position:absolute;left:60px;right:60px;top:190px;height:1060px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.flash{position:absolute;inset:0;background:#fff;z-index:30;opacity:0;pointer-events:none;
+  animation:flash .35s ease-out calc(var(--d)*1s) both}
+@keyframes flash{0%{opacity:0}10%{opacity:.55}100%{opacity:0}}
+
+/* ---------- entradas (delay = --d em segundos absolutos) ---------- */
+.a{animation-delay:calc(var(--d)*1s)!important;animation-fill-mode:both!important}
+.pop{animation:pop .55s var(--back)}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+.up{animation:up .55s var(--out)}
+@keyframes up{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:none}}
+.slam{animation:slam .45s var(--out)}
+@keyframes slam{0%{opacity:0;transform:scale(2.6)}60%{opacity:1;transform:scale(.94)}100%{opacity:1;transform:none}}
+.fromL{animation:fromL .6s var(--out)}
+@keyframes fromL{from{opacity:0;transform:translateX(-500px) rotate(-6deg)}to{opacity:1;transform:none}}
+.fromR{animation:fromR .6s var(--out)}
+@keyframes fromR{from{opacity:0;transform:translateX(500px) rotate(6deg)}to{opacity:1;transform:none}}
+.wipe{animation:wipe .7s var(--io)}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.gone{animation:gone .25s ease}
+@keyframes gone{from{opacity:1}to{opacity:0;transform:translateY(-30px)}}
+
+/* ---------- tipografia ---------- */
+.anton{font-family:Anton,sans-serif;text-transform:uppercase;line-height:.95;letter-spacing:.01em}
+.kicker{font-weight:800;font-size:34px;letter-spacing:.22em;text-transform:uppercase;color:var(--yel)}
+.hl{color:var(--yel)} .gr{color:var(--grn)} .rd{color:var(--red)}
+.pill{display:inline-block;padding:10px 26px;border-radius:999px;font-weight:800;font-size:30px;letter-spacing:.12em;text-transform:uppercase}
+.card{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:36px;backdrop-filter:blur(8px)}
+.mark{background:var(--yel);color:#0b0f22;padding:0 18px;border-radius:12px;box-decoration-break:clone}
+
+/* palavra a palavra */
+.cap{position:absolute;left:0;right:0;display:flex;justify-content:center;flex-wrap:wrap;gap:0 22px}
+.cap span{display:inline-block;animation:word .3s var(--back)}
+@keyframes word{from{opacity:0;transform:translateY(40px) scale(.6)}to{opacity:1;transform:none}}
+.hold{position:absolute;left:0;right:0;animation:gone .2s ease}
+
+/* casas */
+.houses{display:grid;grid-template-columns:repeat(5,150px);gap:28px 30px}
+.house{width:150px;height:150px;color:#2a3566;animation:pop .45s var(--back)}
+.house svg{width:100%;height:100%;filter:drop-shadow(0 0 0 transparent)}
+.lit{animation:lit .35s ease-out}
+@keyframes lit{from{color:#2a3566;transform:scale(1)}50%{transform:scale(1.18)}to{color:var(--yel);transform:scale(1);filter:drop-shadow(0 0 28px rgba(255,210,63,.6))}}
+
+.shake{animation:shake .6s linear}
+@keyframes shake{0%,100%{transform:none}10%{transform:translate(-18px,10px) rotate(-1deg)}20%{transform:translate(16px,-12px) rotate(1deg)}30%{transform:translate(-14px,8px)}40%{transform:translate(12px,-6px)}50%{transform:translate(-8px,4px)}60%{transform:translate(6px,-3px)}70%{transform:translate(-3px,2px)}}
+.glitch{animation:glitch .9s steps(1) infinite}
+@keyframes glitch{0%{text-shadow:6px 0 var(--red),-6px 0 var(--blu)}25%{text-shadow:-4px 2px var(--red),4px -2px var(--blu);transform:translateX(3px)}50%{text-shadow:2px 0 var(--red),-2px 0 var(--blu);transform:none}75%{text-shadow:-7px 0 var(--red),7px 0 var(--blu);transform:translateX(-4px)}}
+.pulse{animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.bob{animation:bob 1.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-22px)}}
+.spin{animation:spin 8s linear infinite;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* gráfico de barra caindo */
+.drop{animation:drop 1.4s var(--io)}
+@keyframes drop{from{height:560px}to{height:448px}}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.6s var(--io)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.coin{animation:coin 1.1s cubic-bezier(.55,0,1,.45) infinite}
+@keyframes coin{0%{transform:translate(0,0);opacity:0}10%{opacity:1}100%{transform:translate(var(--x),330px) rotate(260deg);opacity:0}}
+.donut{animation:donut 1.8s var(--io)}
+@keyframes donut{from{stroke-dashoffset:1257}to{stroke-dashoffset:377}}
+.grow{transform-origin:bottom;animation:grow 1.6s var(--out)}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.stamp{animation:stamp .5s var(--back)}
+@keyframes stamp{from{opacity:0;transform:scale(2.5) rotate(-14deg)}to{opacity:1;transform:rotate(-8deg)}}
+.sand{animation:sand 2s linear infinite;transform-origin:center}
+@keyframes sand{0%,40%{transform:rotate(0)}50%,90%{transform:rotate(180deg)}100%{transform:rotate(180deg)}}
+.vote{transform-origin:left;animation:vote 3.2s ease-in-out infinite alternate}
+@keyframes vote{0%{transform:scaleX(var(--a))}100%{transform:scaleX(var(--b))}}
+.tap{animation:tap 1.6s ease-in-out infinite}
+@keyframes tap{0%,100%{transform:translate(0,0)}40%{transform:translate(-40px,-150px)}50%{transform:translate(-40px,-150px) scale(.85)}60%{transform:translate(-40px,-150px)}}
+.typing{overflow:hidden;white-space:nowrap;animation:typing 1s steps(8)}
+@keyframes typing{from{width:0}to{width:var(--w)}}
+.caret{display:inline-block;width:5px;height:58px;background:var(--yel);vertical-align:middle;animation:blink .7s steps(1) infinite}
+.feed{animation:feed .5s var(--out)}
+@keyframes feed{from{opacity:0;transform:translateX(120px)}to{opacity:1;transform:none}}
+.heart{animation:heart .9s var(--back)}
+@keyframes heart{0%{opacity:0;transform:scale(0)}60%{opacity:1;transform:scale(1.4)}100%{opacity:0;transform:translateY(-200px) scale(1)}}
+.rays{animation:rays 1s var(--out)}
+@keyframes rays{0%{opacity:0;transform:scale(.2)}8%{opacity:1}100%{opacity:0;transform:scale(2.2)}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- ======= FUNDO ======= -->
+  <div class="grid"></div>
+  <div class="orb" style="width:620px;height:620px;left:-180px;top:180px;background:#3b4fd9"></div>
+  <div class="orb" style="width:520px;height:520px;right:-160px;top:760px;background:#7a2bd9;animation-delay:-6s"></div>
+  <div id="dots"></div>
+  <svg class="skyline" viewBox="0 0 1080 520" preserveAspectRatio="none">
+    <g fill="#121b3f">
+      <rect x="0" y="260" width="110" height="260"/><rect x="120" y="170" width="90" height="350"/>
+      <rect x="220" y="300" width="130" height="220"/><rect x="360" y="110" width="100" height="410"/>
+      <rect x="470" y="220" width="140" height="300"/><rect x="620" y="60" width="95" height="460"/>
+      <rect x="725" y="250" width="120" height="270"/><rect x="855" y="150" width="105" height="370"/>
+      <rect x="970" y="280" width="110" height="240"/>
+    </g>
+    <g fill="#ffd23f" id="win"></g>
+  </svg>
+  <div class="bottomfade"></div>
+
+  <!-- ======= TOPO ======= -->
+  <div id="top">
+    <div class="bars">
+      <div class="seg"><i style="--d:0;--len:5"></i></div>
+      <div class="seg"><i style="--d:5;--len:15"></i></div>
+      <div class="seg"><i style="--d:20;--len:15"></i></div>
+      <div class="seg"><i style="--d:35;--len:15"></i></div>
+    </div>
+    <div class="tag"><span class="live"></span> MERCADO IMOBILIÁRIO · SP</div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="ico-house" viewBox="0 0 64 64"><path fill="currentColor" d="M32 6 4 30h8v26h16V40h8v16h16V30h8z"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ===================== CENA 1 · GANCHO 0–5 ===================== -->
+  <section class="scene" style="--s:0;--e:5.15">
+    <div class="safe" style="justify-content:flex-start;padding-top:40px">
+      <div class="a pill pop" style="--d:.05;background:var(--red);color:#fff">Você sabia?</div>
+      <div style="display:flex;align-items:baseline;gap:22px;margin-top:34px">
+        <div class="a anton slam hl" style="--d:.35;font-size:330px;text-shadow:0 0 60px rgba(255,210,63,.45)">7</div>
+        <div class="a anton up" style="--d:.6;font-size:96px;text-align:left">em cada<br><span class="hl">10</span> imóveis</div>
+      </div>
+      <div class="houses" style="margin-top:30px">
+        <!-- 10 casas, 7 acendem -->
+      </div>
+      <div style="position:relative;width:100%;height:230px;margin-top:46px">
+        <div class="hold a" style="--d:3.25;top:0">
+          <div class="cap anton" style="font-size:84px">
+            <span class="a" style="--d:2.05">têm</span><span class="a hl" style="--d:2.3">UMA</span><span class="a" style="--d:2.55">coisa</span><span class="a" style="--d:2.8">em</span><span class="a" style="--d:2.95">comum</span>
+          </div>
+        </div>
+        <div class="cap anton" style="font-size:84px;top:0">
+          <span class="a rd" style="--d:3.4">E&nbsp;não...</span>
+        </div>
+        <div class="cap anton" style="font-size:70px;top:110px">
+          <span class="a" style="--d:3.95">não&nbsp;são&nbsp;de</span><span class="a" style="--d:4.25;position:relative">
+            <span class="mark">LUXO</span>
+            <svg class="a pop" style="--d:4.45;position:absolute;left:-20px;top:-14px;width:250px;height:110px" viewBox="0 0 250 110"><path d="M10 10 240 100M240 10 10 100" stroke="#ff4d5e" stroke-width="14" stroke-linecap="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="flash" style="--d:5"></div>
+
+  <!-- ===================== CENA 2 · QUEDA 5–12 ===================== -->
+  <section class="scene" style="--s:5;--e:12.1">
+    <div class="safe" style="justify-content:flex-start;padding-top:20px">
+      <div class="a kicker up" style="--d:5.1">Médio e alto padrão</div>
+      <div style="display:flex;align-items:flex-end;gap:50px;margin-top:30px;height:600px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+          <div style="width:200px;height:560px;border-radius:24px 24px 0 0;background:rgba(255,255,255,.1);position:relative;overflow:hidden">
+            <div class="a drop" style="--d:5.7;position:absolute;bottom:0;left:0;right:0;height:448px;border-radius:24px 24px 0 0;background:linear-gradient(#ff4d5e,#a3243a)"></div>
+            <div style="position:absolute;top:0;left:0;right:0;height:112px;border-bottom:4px dashed rgba(255,255,255,.5)"></div>
+          </div>
+          <div style="font-weight:800;font-size:30px;color:var(--mute)">VENDAS</div>
+        </div>
+        <div style="text-align:left">
+          <svg class="a pop" style="--d:6;width:150px;height:150px" viewBox="0 0 100 100"><path d="M50 92 12 50h24V8h28v42h24z" fill="#ff4d5e"/></svg>
+          <div class="a anton rd slam" style="--d:6.1;font-size:250px"><span>-</span><span data-count="20" data-from="0" data-t0="6.1" data-dur="1.3">0</span>%</div>
+          <div class="a up" style="--d:6.6;font-weight:800;font-size:40px">nas vendas</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:26px;margin-top:50px;width:100%">
+        <div class="a card fromL" style="--d:8.3;display:flex;align-items:center;gap:30px;padding:26px 36px">
+          <svg style="width:110px;height:110px;flex:none" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#ff4d5e22" stroke="#ff4d5e" stroke-width="6"/><path d="M28 66 50 38 72 66" fill="none" stroke="#ff4d5e" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path class="a draw" style="--d:8.6" pathLength="1" d="M28 46 50 22 72 46" fill="none" stroke="#ff4d5e" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="anton" style="font-size:78px;text-align:left">Juros <span class="rd">altos</span></div>
+        </div>
+        <div class="a card fromR" style="--d:9.9;display:flex;align-items:center;gap:30px;padding:26px 36px;position:relative">
+          <div style="position:relative;width:110px;height:110px;flex:none">
+            <svg viewBox="0 0 100 100" style="width:110px;height:110px"><ellipse cx="50" cy="55" rx="40" ry="32" fill="#ff8fb1"/><circle cx="72" cy="48" r="4" fill="#3a1a2a"/><rect x="40" y="22" width="22" height="7" rx="3" fill="#3a1a2a"/><rect x="24" y="80" width="12" height="14" rx="4" fill="#ff8fb1"/><rect x="62" y="80" width="12" height="14" rx="4" fill="#ff8fb1"/><ellipse cx="90" cy="58" rx="8" ry="10" fill="#ff7aa0"/></svg>
+            <div class="coin" style="--x:-30px;position:absolute;left:45px;top:20px;width:34px;height:34px;border-radius:50%;background:var(--yel);border:4px solid #c99a12"></div>
+            <div class="coin" style="--x:40px;position:absolute;left:45px;top:20px;width:34px;height:34px;border-radius:50%;background:var(--yel);border:4px solid #c99a12;animation-delay:-.4s"></div>
+            <div class="coin" style="--x:5px;position:absolute;left:45px;top:20px;width:34px;height:34px;border-radius:50%;background:var(--yel);border:4px solid #c99a12;animation-delay:-.75s"></div>
+          </div>
+          <div class="anton" style="font-size:66px;text-align:left;line-height:1.05"><span class="hl">Bilhões</span> saindo<br>da poupança</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="flash" style="--d:12"></div>
+
+  <!-- ===================== CENA 3 · A VIRADA 12–20 ===================== -->
+  <section class="scene" style="--s:12;--e:20.15">
+    <div class="a shake" style="--d:17.4;position:absolute;inset:0">
+      <div class="safe">
+        <div class="a" style="--d:14.6;position:absolute;top:110px;left:0;right:0;animation:gone .3s ease">
+          <div class="a anton glitch up" style="--d:12.1;font-size:150px;color:var(--mute)">Enquanto<br>isso...</div>
+        </div>
+        <div class="a kicker up" style="--d:14.6;position:absolute;top:60px;left:0;right:0;font-size:40px">Um outro lado do mercado</div>
+        <svg viewBox="0 0 900 600" style="position:absolute;top:170px;left:0;width:960px;height:640px">
+          <defs><linearGradient id="gArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2ee59d" stop-opacity=".45"/><stop offset="1" stop-color="#2ee59d" stop-opacity="0"/></linearGradient></defs>
+          <g stroke="rgba(255,255,255,.08)" stroke-width="2"><path d="M0 150H900M0 300H900M0 450H900"/></g>
+          <path class="a fade" style="--d:16.6;animation:up .8s var(--out)" d="M20 560 C140 540 230 520 330 470 S520 380 600 300 S760 90 860 30 V600 H20Z" fill="url(#gArea)"/>
+          <path class="a draw" style="--d:15.2" pathLength="1" d="M20 560 C140 540 230 520 330 470 S520 380 600 300 S760 90 860 30" fill="none" stroke="#2ee59d" stroke-width="16" stroke-linecap="round"/>
+          <g class="a pop" style="--d:16.7;transform-origin:860px 30px"><circle cx="860" cy="30" r="26" fill="#2ee59d"/><circle cx="860" cy="30" r="48" fill="none" stroke="#2ee59d" stroke-width="5" class="pulse" style="transform-origin:860px 30px"/></g>
+        </svg>
+        <div class="a" style="--d:17.3;position:absolute;left:50%;top:640px;width:900px;height:900px;margin:-450px 0 0 -450px;animation:rays 1s var(--out)">
+          <svg viewBox="-100 -100 200 200" style="width:100%;height:100%"><g fill="#2ee59d" opacity=".55">
+            <path d="M-4 -100h8L0 -20z"/><path d="M-4 -100h8L0 -20z" transform="rotate(30)"/><path d="M-4 -100h8L0 -20z" transform="rotate(60)"/><path d="M-4 -100h8L0 -20z" transform="rotate(90)"/><path d="M-4 -100h8L0 -20z" transform="rotate(120)"/><path d="M-4 -100h8L0 -20z" transform="rotate(150)"/><path d="M-4 -100h8L0 -20z" transform="rotate(180)"/><path d="M-4 -100h8L0 -20z" transform="rotate(210)"/><path d="M-4 -100h8L0 -20z" transform="rotate(240)"/><path d="M-4 -100h8L0 -20z" transform="rotate(270)"/><path d="M-4 -100h8L0 -20z" transform="rotate(300)"/><path d="M-4 -100h8L0 -20z" transform="rotate(330)"/></g></svg>
+        </div>
+        <div class="a anton slam gr" style="--d:17.3;position:absolute;top:820px;left:0;right:0;font-size:200px;text-shadow:0 0 70px rgba(46,229,157,.6)">EXPLODIU</div>
+      </div>
+    </div>
+  </section>
+  <div class="flash" style="--d:17.3;background:#2ee59d"></div>
+  <div class="flash" style="--d:20"></div>
+
+  <!-- ===================== CENA 4 · A NOTÍCIA 20–27.5 ===================== -->
+  <section class="scene" style="--s:20;--e:27.6">
+    <div class="safe" style="justify-content:flex-start;padding-top:10px">
+      <div class="a wipe" style="--d:20.1;display:flex;width:100%;font-weight:900;font-size:34px;letter-spacing:.14em">
+        <div style="background:var(--red);padding:16px 26px">URGENTE</div>
+        <div style="background:#fff;color:#0b0f22;padding:16px 26px;flex:1;text-align:left">MERCADO IMOBILIÁRIO</div>
+      </div>
+      <div class="a card up" style="--d:20.5;width:100%;padding:44px 46px;margin-top:26px;text-align:left;background:#f4f6ff;color:#0b0f22;border:none">
+        <div class="anton" style="font-size:100px;line-height:1"><span style="background:var(--yel);padding:0 10px">Minha Casa,<br>Minha Vida</span><br>domina <span style="color:#e2283c">70%</span> do mercado</div>
+        <div style="margin-top:22px;font-weight:700;font-size:28px;color:#5a6280">Dados: Secovi-SP</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:50px;margin-top:46px">
+        <div class="a pop" style="--d:22.8;position:relative;width:440px;height:440px">
+          <svg viewBox="0 0 440 440" style="width:440px;height:440px;transform:rotate(-90deg)">
+            <circle cx="220" cy="220" r="200" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="40"/>
+            <circle class="a donut" style="--d:23.1" cx="220" cy="220" r="200" fill="none" stroke="#ffd23f" stroke-width="40" stroke-linecap="round" stroke-dasharray="1257" stroke-dashoffset="377"/>
+          </svg>
+          <div class="anton hl" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:150px"><span data-count="70" data-from="0" data-t0="23.1" data-dur="1.8">0</span>%</div>
+        </div>
+        <div style="text-align:left;display:flex;flex-direction:column;gap:30px">
+          <div class="a fromR" style="--d:24.6;display:flex;align-items:center;gap:16px;font-weight:800;font-size:38px"><i style="width:30px;height:30px;border-radius:8px;background:var(--yel)"></i>MCMV</div>
+          <div class="a fromR" style="--d:24.9;display:flex;align-items:center;gap:16px;font-weight:800;font-size:38px;color:var(--mute)"><i style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.25)"></i>Demais</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="flash" style="--d:27.5"></div>
+
+  <!-- ===================== CENA 5 · CLASSE MÉDIA x ECONÔMICO 27.5–35 ===================== -->
+  <section class="scene" style="--s:27.5;--e:35.15">
+    <div class="safe" style="justify-content:flex-start;padding-top:10px">
+      <div style="display:flex;gap:30px;width:100%;height:960px">
+        <div class="a card fromL" style="--d:27.6;flex:1;padding:36px 26px;display:flex;flex-direction:column;align-items:center;opacity:.9">
+          <div class="pill" style="background:rgba(255,255,255,.12);color:var(--mute);font-size:26px">Classe média</div>
+          <svg class="a pop" style="--d:28.2;width:150px;height:150px;margin-top:40px" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#8d97bd" stroke-width="6"/><rect x="34" y="28" width="11" height="44" rx="3" fill="#8d97bd"/><rect x="55" y="28" width="11" height="44" rx="3" fill="#8d97bd"/></svg>
+          <div class="a anton up" style="--d:28.5;font-size:70px;margin-top:30px;color:#c9cfea">Segurando<br>a compra</div>
+          <div style="flex:1"></div>
+          <svg class="sand" style="width:110px;height:140px" viewBox="0 0 60 80"><path d="M8 4h44M8 76h44M12 4c0 22 36 22 36 36S12 54 12 76M48 4c0 22-36 22-36 36s36 14 36 36" fill="none" stroke="#8d97bd" stroke-width="4" stroke-linecap="round"/><path d="M20 70h20l-10-14z" fill="#ffd23f"/></svg>
+          <div class="a up" style="--d:29.4;font-weight:700;font-size:32px;color:var(--mute);margin-top:22px">esperando os<br>juros caírem</div>
+        </div>
+        <div class="a card fromR" style="--d:30.4;flex:1;padding:36px 26px;display:flex;flex-direction:column;align-items:center;border-color:rgba(46,229,157,.5);background:rgba(46,229,157,.08);position:relative">
+          <div class="pill" style="background:var(--grn);color:#062417;font-size:26px">Mercado econômico</div>
+          <div style="position:relative;width:100%;flex:1;margin-top:40px;display:flex;align-items:flex-end;justify-content:center;gap:22px">
+            <div style="position:absolute;left:0;right:0;top:170px;border-top:4px dashed rgba(255,255,255,.45)"></div>
+            <div style="position:absolute;right:4px;top:128px;font-weight:700;font-size:24px;color:var(--mute)">recorde anterior</div>
+            <div class="a grow" style="--d:30.8;width:80px;height:300px;border-radius:14px 14px 0 0;background:rgba(46,229,157,.35)"></div>
+            <div class="a grow" style="--d:31;width:80px;height:420px;border-radius:14px 14px 0 0;background:rgba(46,229,157,.55)"></div>
+            <div class="a grow" style="--d:31.2;width:80px;height:620px;border-radius:14px 14px 0 0;background:linear-gradient(#2ee59d,#18a56f);box-shadow:0 0 50px rgba(46,229,157,.5)"></div>
+          </div>
+          <div class="a stamp" style="--d:32.4;position:absolute;left:30px;right:30px;top:300px;border:8px solid var(--yel);border-radius:22px;padding:16px 10px;background:rgba(7,11,26,.85)">
+            <svg style="width:90px;height:90px" viewBox="0 0 100 100"><path d="M28 10h44v26c0 16-10 26-22 26S28 52 28 36zM28 18H12c0 16 8 24 18 24M72 18h16c0 16-8 24-18 24M42 62h16v14H42zM30 78h40v12H30z" fill="#ffd23f"/></svg>
+            <div class="anton hl" style="font-size:72px">Recorde<br>histórico</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="flash" style="--d:35"></div>
+
+  <!-- ===================== CENA 6 · ENQUETE 35–42.5 ===================== -->
+  <section class="scene" style="--s:35;--e:42.6">
+    <div class="safe" style="justify-content:flex-start;padding-top:20px">
+      <svg class="a pop" style="--d:35.1;width:130px;height:150px" viewBox="0 0 60 70"><g class="bob"><path d="M30 2C16 2 6 12 6 26c0 18 24 40 24 40s24-22 24-40C54 12 44 2 30 2z" fill="#ff4d5e"/><circle cx="30" cy="26" r="9" fill="#fff"/></g></svg>
+      <div class="a anton up" style="--d:35.4;font-size:110px;margin-top:10px">E na <span class="hl">sua</span> cidade?</div>
+      <div class="a card up" style="--d:36.6;width:100%;margin-top:46px;padding:40px;text-align:left;position:relative">
+        <div style="font-weight:800;font-size:40px;margin-bottom:30px">O que mais tá saindo aí?</div>
+        <div class="a fromL" style="--d:37.2;position:relative;height:120px;border-radius:24px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:24px">
+          <div class="vote" style="--a:.35;--b:.68;position:absolute;inset:0;background:linear-gradient(90deg,#ffd23f,#ffb000)"></div>
+          <div style="position:relative;display:flex;align-items:center;gap:22px;height:100%;padding:0 30px;font-weight:900;font-size:44px;color:#0b0f22;mix-blend-mode:normal">
+            <svg style="width:60px;height:60px" viewBox="0 0 64 64"><use href="#ico-house"/></svg><span style="color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6)">Só imóvel popular</span>
+          </div>
+        </div>
+        <div class="a fromL" style="--d:37.6;position:relative;height:120px;border-radius:24px;background:rgba(255,255,255,.08);overflow:hidden">
+          <div class="vote" style="--a:.6;--b:.3;position:absolute;inset:0;background:linear-gradient(90deg,#9a7bff,#5b3df5)"></div>
+          <div style="position:relative;display:flex;align-items:center;gap:22px;height:100%;padding:0 30px;font-weight:900;font-size:44px">
+            <svg style="width:60px;height:60px" viewBox="0 0 64 64"><path d="M14 8h36l12 16-30 34L2 24z" fill="#fff"/><path d="M2 24h60M14 8l8 16 10 34 10-34 8-16" fill="none" stroke="#5b3df5" stroke-width="3"/></svg><span>Luxo ainda forte</span>
+          </div>
+        </div>
+        <svg class="a fade tap" style="--d:38.4;position:absolute;right:50px;bottom:-110px;width:120px;height:140px" viewBox="0 0 48 56"><path d="M18 4c3 0 5 2 5 5v16l3-1c3 0 5 2 5 4l1-1c3 0 5 2 5 4l1 0c3 0 5 2 5 5v9c0 8-6 13-14 13h-4c-6 0-9-3-12-7L5 37c-2-2-2-5 0-7s5-2 7 0l1 2V9c0-3 2-5 5-5z" fill="#fff" stroke="#0b0f22" stroke-width="2.5"/></svg>
+      </div>
+      <div class="a up" style="--d:39.8;margin-top:80px;font-weight:800;font-size:44px">Responde aqui nos comentários <span class="hl">↓</span></div>
+    </div>
+  </section>
+  <div class="flash" style="--d:42.5"></div>
+
+  <!-- ===================== CENA 7 · CTA EU QUERO 42.5–50 ===================== -->
+  <section class="scene" style="--s:42.5;--e:50.4">
+    <div class="safe" style="justify-content:flex-start;padding-top:10px">
+      <div class="a kicker up" style="--d:42.6">Vai comprar ou financiar?</div>
+      <div class="a anton slam" style="--d:42.9;font-size:120px;margin-top:20px">Comenta</div>
+      <div class="a card pop" style="--d:43.4;margin-top:30px;width:100%;display:flex;align-items:center;gap:24px;padding:26px 30px;border-color:var(--yel);background:rgba(255,210,63,.1)">
+        <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#ffd23f,#ff4d5e);flex:none"></div>
+        <div class="anton hl" style="font-size:100px;text-align:left;flex:1;display:flex;align-items:center">
+          <span class="a typing" style="--d:43.8;--w:460px;display:inline-block">“EU QUERO”</span><span class="caret"></span>
+        </div>
+        <svg class="a pop" style="--d:45;width:90px;height:90px;flex:none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#ffd23f"/><path d="M6 12l12-5-4 12-2.5-4.5z" fill="#0b0f22"/></svg>
+      </div>
+      <div style="position:relative;width:100%;height:330px;margin-top:26px">
+        <svg class="a heart" style="--d:45.1;position:absolute;right:80px;top:40px;width:110px;height:110px" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3c0 5.7-8 11-8 11z" fill="#ff4d5e"/></svg>
+        <svg class="a heart" style="--d:45.4;position:absolute;right:200px;top:80px;width:80px;height:80px" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3c0 5.7-8 11-8 11z" fill="#ff4d5e"/></svg>
+        <div style="display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+          <div class="a feed card" style="--d:45.6;padding:16px 26px;font-weight:700;font-size:32px;border-radius:24px"><span style="color:var(--mute)">@ana.imoveis</span> EU QUERO</div>
+          <div class="a feed card" style="--d:46;padding:16px 26px;font-weight:700;font-size:32px;border-radius:24px"><span style="color:var(--mute)">@rafa_sp</span> EU QUERO!!</div>
+          <div class="a feed card" style="--d:46.4;padding:16px 26px;font-weight:700;font-size:32px;border-radius:24px"><span style="color:var(--mute)">@primeiro.ap</span> eu quero</div>
+        </div>
+      </div>
+      <div class="a up" style="--d:47.2;width:100%;margin-top:20px;border-radius:30px;padding:30px 36px;background:linear-gradient(135deg,#4da3ff,#5b3df5);display:flex;align-items:center;gap:28px;text-align:left">
+        <div style="flex:none;width:150px;border-radius:18px;overflow:hidden;background:#fff;color:#0b0f22;text-align:center">
+          <div style="background:var(--red);color:#fff;font-weight:900;font-size:22px;padding:6px 0;letter-spacing:.1em">PRÓXIMO</div>
+          <div class="anton" style="font-size:62px;padding:6px 0">2027</div>
+        </div>
+        <div><div style="font-weight:800;font-size:28px;letter-spacing:.14em;opacity:.85">PRÓXIMO VÍDEO</div>
+        <div class="anton" style="font-size:60px;line-height:1.02;margin-top:6px">O que muda nos<br>financiamentos</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// casas do gancho: 10, as 7 primeiras acendem
+const grid = document.querySelector('.houses');
+for (let i = 0; i < 10; i++) {
+  const d = document.createElement('div');
+  d.className = 'a house'; d.style.setProperty('--d', (0.9 + i * 0.07).toFixed(2));
+  const inner = document.createElement('div');
+  if (i < 7) { inner.className = 'a lit'; inner.style.setProperty('--d', (1.55 + i * 0.09).toFixed(2)); }
+  inner.style.cssText += ';width:100%;height:100%;color:#2a3566';
+  inner.innerHTML = '<svg viewBox="0 0 64 64"><use href="#ico-house"/></svg>';
+  d.appendChild(inner); grid.appendChild(d);
+}
+// partículas
+const dots = document.getElementById('dots');
+for (let i = 0; i < 26; i++) {
+  const p = document.createElement('div'); p.className = 'dot';
+  p.style.left = (Math.sin(i * 97.3) * .5 + .5) * 1060 + 'px';
+  p.style.top = 700 + (Math.cos(i * 41.7) * .5 + .5) * 1100 + 'px';
+  p.style.animationDelay = (-(i * 0.61) % 7) + 's';
+  p.style.background = ['#ffd23f', '#4da3ff', '#2ee59d'][i % 3];
+  dots.appendChild(p);
+}
+// janelas acesas no skyline
+const win = document.getElementById('win');
+const blds = [[0,260,110],[120,170,90],[220,300,130],[360,110,100],[470,220,140],[620,60,95],[725,250,120],[855,150,105],[970,280,110]];
+let k = 0;
+for (const [x, y, w] of blds) for (let yy = y + 24; yy < 500; yy += 46) for (let xx = x + 16; xx < x + w - 20; xx += 30) {
+  k++; if ((Math.sin(k * 12.9898) * 43758.5453 % 1 + 1) % 1 > 0.35) continue;
+  const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  r.setAttribute('x', xx); r.setAttribute('y', yy); r.setAttribute('width', 12); r.setAttribute('height', 18);
+  r.setAttribute('opacity', 0.25 + ((k * 7) % 5) / 10); win.appendChild(r);
+}
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+window.seek = (t) => {
+  for (const a of document.getAnimations()) { a.pause(); a.currentTime = t * 1000; }
+  for (const el of document.querySelectorAll('[data-count]')) {
+    const p = Math.min(1, Math.max(0, (t - +el.dataset.t0) / +el.dataset.dur));
+    el.textContent = Math.round(+el.dataset.from + (+el.dataset.count - +el.dataset.from) * easeOut(p));
+  }
+};
+window.ready = (async () => { await document.fonts.ready; return true; })();
+</script>
+</body>
+</html>
