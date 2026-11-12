@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Reis Imóveis — Capa</title>
+<style>
+  @font-face { font-family: "Italiana"; src: url("fonts/Italiana-Regular.ttf"); }
+  @font-face { font-family: "InstrumentSerif"; src: url("fonts/InstrumentSerif-Italic.ttf"); font-style: italic; }
+  @font-face { font-family: "Jura"; src: url("fonts/Jura-Light.ttf"); font-weight: 300; }
+  @font-face { font-family: "Jura"; src: url("fonts/Jura-Medium.ttf"); font-weight: 500; }
+  html, body { margin: 0; padding: 0; background: #F1ECE2; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const params = new URLSearchParams(location.search);
+const variant = params.get("v") || "retrato";
+
+// Paleta
+const DARK = params.get("t") === "escuro";
+const PAPER = DARK ? "#16231E" : "#F1ECE2";   // verde-floresta profundo | marfim
+const INK   = DARK ? "#DCC9A0" : "#1E2B26";   // champanhe | verde quase negro
+const BRASS = DARK ? "#C59A55" : "#A6824E";   // ouro velho | latão envelhecido
+const VIG   = DARK ? "#0A120F" : "#D9D0BF";
+const GRAIN = DARK ? "0 0 0 0 0.92  0 0 0 0 0.86  0 0 0 0 0.72  0 0 0 0.07 0"
+                   : "0 0 0 0 0.12  0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0.09 0";
+document.documentElement.style.background = PAPER;
+
+const NAME    = "REIS";
+const SUB     = "NEGÓCIOS IMOBILIÁRIOS";
+const TAGLINE = "Confiança em cada endereço.";
+const NAME2   = "IMÓVEIS";
+
+const ns = "http://www.w3.org/2000/svg";
+const f = n => +n.toFixed(2);
+
+function archPath(cx, by, w, h) {
+  const r = w / 2, sy = by - h + r;
+  return `M${f(cx-r)},${f(by)} L${f(cx-r)},${f(sy)} A${f(r)},${f(r)} 0 0 1 ${f(cx+r)},${f(sy)} L${f(cx+r)},${f(by)}`;
+}
+
+// O limiar: arcos aninhados convergindo para o centro da soleira
+function threshold(cx, by, w, h, opts = {}) {
+  const n = opts.n || 44, ratio = opts.ratio || 0.935;
+  let out = "";
+  for (let i = 0; i < n; i++) {
+    const s = Math.pow(ratio, i);
+    const t = i / (n - 1);
+    const op = 0.92 - 0.62 * t;
+    const sw = i === 0 ? 1.4 : 0.75;
+    out += `<path d="${archPath(cx, by, w * s, h * s)}" fill="none" stroke="${INK}" stroke-width="${sw}" stroke-opacity="${f(op)}"/>`;
+  }
+  // Moldura externa dupla (batente)
+  const g = opts.gap || 14;
+  out += `<path d="${archPath(cx, by, w + 2*g, h + g)}" fill="none" stroke="${INK}" stroke-width="0.7" stroke-opacity="0.55"/>`;
+
+  // Pedra angular (keystone) — o que sustenta o arco
+  const ky = by - h - g / 2, kt = opts.k || 1;
+  const kw1 = 30*kt, kw2 = 18*kt, kh = 40*kt;
+  const top = ky - kh*0.42, bot = ky + kh*0.58;
+  out += `<path d="M${f(cx-kw1/2)},${f(top)} L${f(cx+kw1/2)},${f(top)} L${f(cx+kw2/2)},${f(bot)} L${f(cx-kw2/2)},${f(bot)} Z"
+           fill="${PAPER}" stroke="${BRASS}" stroke-width="1.1"/>`;
+  out += `<path d="M${f(cx-kw1/2+5*kt)},${f(top+5*kt)} L${f(cx+kw1/2-5*kt)},${f(top+5*kt)} L${f(cx+kw2/2-3*kt)},${f(bot-5*kt)} L${f(cx-kw2/2+3*kt)},${f(bot-5*kt)} Z"
+           fill="${BRASS}" fill-opacity="0.85"/>`;
+
+  // Soleira: linha de base com régua
+  const half = opts.base || w * 0.95;
+  out += `<line x1="${f(cx-half)}" y1="${by}" x2="${f(cx+half)}" y2="${by}" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.8"/>`;
+  const step = opts.tick || 12;
+  for (let x = -half; x <= half + 0.01; x += step) {
+    const k = Math.round(x / step);
+    const len = k % 10 === 0 ? 9 : (k % 5 === 0 ? 6 : 3);
+    out += `<line x1="${f(cx+x)}" y1="${by+3}" x2="${f(cx+x)}" y2="${by+3+len}" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.5"/>`;
+  }
+  // Ponto de chegada
+  out += `<circle cx="${cx}" cy="${by}" r="${3.2*kt}" fill="${BRASS}"/>`;
+  return out;
+}
+
+
+// ===== Conceito C — "Casa" : casas aninhadas convergindo para a porta =====
+function housePath(cx, by, w, hw, hr) {
+  const l = cx - w/2, r = cx + w/2;
+  return `M${f(l)},${f(by)} L${f(l)},${f(by-hw)} L${f(cx)},${f(by-hw-hr)} L${f(r)},${f(by-hw)} L${f(r)},${f(by)}`;
+}
+function house(cx, by, w, hw, hr, o = {}) {
+  const n = o.n || 38, ratio = o.ratio || 0.935, k = o.k || 1;
+  let out = "";
+  for (let i = 0; i < n; i++) {
+    const s = Math.pow(ratio, i), t = i / (n - 1);
+    out += `<path d="${housePath(cx, by, w*s, hw*s, hr*s)}" fill="none" stroke="${INK}" stroke-linejoin="miter"
+             stroke-width="${i === 0 ? 1.4 : 0.75}" stroke-opacity="${f(0.92 - 0.6*t)}"/>`;
+  }
+  // Beiral: telhado externo paralelo, avançando além das paredes
+  const g = o.gap || 26, W2 = w + 2*g, hr2 = hr * W2 / w;
+  const slope = hr / (w/2), lift = o.lift || 16;
+  const pk = by - hw - hr - lift - g*slope*0 ; // pico externo
+  const ey = by - hw - lift + g*slope*0;
+  const L = cx - W2/2, R = cx + W2/2;
+  const peakY = by - hw - hr - lift;
+  const eaveY = peakY + slope * (W2/2);
+  out += `<path d="M${f(L)},${f(eaveY)} L${f(cx)},${f(peakY)} L${f(R)},${f(eaveY)}" fill="none" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.7"/>`;
+  out += `<path d="M${f(L+6)},${f(eaveY+6*slope*0+4)} L${f(L)},${f(eaveY)}" fill="none" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.7"/>`;
+  out += `<path d="M${f(R-6)},${f(eaveY+4)} L${f(R)},${f(eaveY)}" fill="none" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.7"/>`;
+  // Florão dourado no cume
+  out += `<path d="M${cx},${f(peakY-14*k)} l${f(9*k)},${f(9*k)} l${f(-9*k)},${f(9*k)} l${f(-9*k)},${f(-9*k)} Z" fill="${PAPER}" stroke="${BRASS}" stroke-width="1.1"/>`;
+  out += `<path d="M${cx},${f(peakY-8*k)} l${f(3.5*k)},${f(3.5*k)} l${f(-3.5*k)},${f(3.5*k)} l${f(-3.5*k)},${f(-3.5*k)} Z" fill="${BRASS}"/>`;
+  // A porta, no fim do caminho
+  const s = Math.pow(ratio, n - 1), dw = w*s*0.46, dh = hw*s*0.78;
+  out += `<rect x="${f(cx-dw/2)}" y="${f(by-dh)}" width="${f(dw)}" height="${f(dh)}" fill="${BRASS}"/>`;
+  out += `<circle cx="${f(cx+dw*0.26)}" cy="${f(by-dh*0.48)}" r="${f(Math.max(1.1, dw*0.06))}" fill="${PAPER}"/>`;
+  // Chão com régua
+  const half = o.base || w*0.6, step = o.tick || 12;
+  out += `<line x1="${f(cx-half)}" y1="${by}" x2="${f(cx+half)}" y2="${by}" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.8"/>`;
+  for (let x = -half; x <= half + 0.01; x += step) {
+    const kk = Math.round(x/step), len = kk % 10 === 0 ? 9 : (kk % 5 === 0 ? 6 : 3);
+    out += `<line x1="${f(cx+x)}" y1="${by+3}" x2="${f(cx+x)}" y2="${by+3+len}" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.5"/>`;
+  }
+  return { svg: out, top: peakY };
+}
+
+// Leão andando (perfil, voltado para a direita). Chão em y=121. Caixa ~ 0..208 x 10..122
+function lionSVG(fill, far, cut) {
+  // Juba: mechas pontiagudas que fluem para trás
+  const mc = [162, 54];
+  const valleys = [[178,22],[166,14],[153,15],[142,22],[134,32],[129,44],[127,56],[129,68],[134,78],[141,85],[151,88],[162,86],[172,80]];
+  let mane = `M${valleys[0]}`;
+  for (let i = 1; i < valleys.length; i++) {
+    const [x0,y0] = valleys[i-1], [x1,y1] = valleys[i];
+    const mx = (x0+x1)/2, my = (y0+y1)/2;
+    let dx = mx-mc[0], dy = my-mc[1]; const d = Math.hypot(dx,dy); dx/=d; dy/=d;
+    const len = (i > 9 ? 5 : 9) + 3*Math.sin(i*1.7);
+    const tx = mx + dx*len - 5, ty = my + dy*len + 1.5;   // ponta puxada para trás
+    mane += ` Q${(x0+dx*3).toFixed(1)},${(y0+dy*3).toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} Q${(mx+dx*2).toFixed(1)},${(my+dy*2).toFixed(1)} ${x1},${y1}`;
+  }
+  mane += ` C178,72 182,56 184,42 C184,33 182,26 178,22Z`;
+  const body = `M128,46 C110,48 82,52 62,50 C48,49 40,57 40,68 C40,78 42,85 47,90 C52,96 56,100 60,106
+    L62,118 C62,120 64,121 66,121 L80,121 C83,121 82,118 79,117 L72,115 C71,106 70,96 74,88
+    C92,83 116,83 138,88 C142,96 144,108 146,117 C146,120 148,121 150,121 L166,121 C169,121 168,118 165,117 L158,115
+    C157,104 157,94 158,86 C162,78 160,62 150,50 C144,46 136,45 128,46Z`;
+  const farBack  = `M50,78 C46,92 42,104 38,116 L36,121 L50,121 C51,118 49,117 46,116 C50,106 56,96 62,88Z`;
+  const farFront = `M136,84 C134,98 132,108 128,117 L126,121 L140,121 C141,118 139,117 136,116 C140,106 144,96 147,88Z`;
+  const head = `M154,44 C155,33 162,27 172,27 C181,27 187,30 191,34 L203,42 C207,44 208,49 206,52
+    C205,55 202,56 199,56 C200,59 197,62 192,62 C184,64 172,63 165,60 C158,57 154,51 154,44Z`;
+  const ear = `M166,29 C164,21 169,17 174,21 C174,25 171,28 166,29Z`;
+  return `<g>
+    <path d="${farBack}" fill="${far}"/><path d="${farFront}" fill="${far}"/>
+    <path d="M38,60 C24,62 16,72 14,88 C13,96 11,100 8,102" fill="none" stroke="${fill}" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M8,98 C3,100 2,107 6,111 C9,108 12,104 11,99Z" fill="${fill}"/>
+    <path d="${body}" fill="${fill}"/>
+    <path d="${mane}" fill="${fill}" stroke="${cut}" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="${ear}" fill="${fill}" stroke="${cut}" stroke-width="1.2"/>
+    <path d="${head}" fill="${fill}"/>
+    <path d="M163,31 C157,38 156,50 161,57 C164,60 168,62 172,63" fill="none" stroke="${cut}" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M184,37 C186,35.6 189,35.6 191,37.4" fill="none" stroke="${cut}" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M199,56.5 L193,57" fill="none" stroke="${cut}" stroke-width="1.2" stroke-linecap="round"/>
+  </g>`;
+}
+
+
+const LION_GOLD = DARK ? "#D2A963" : "#A6824E";
+const LION_FAR  = DARK ? "#9C7A44" : "#86683D";
+function lion(x, groundY, scale) {
+  return `<g transform="translate(${f(x)},${f(groundY - 121*scale)}) scale(${scale})">${lionSVG(LION_GOLD, LION_FAR, PAPER)}</g>`;
+}
+
+function cross(x, y, s = 7) {
+  return `<g stroke="${INK}" stroke-width="0.6" stroke-opacity="0.55">
+    <line x1="${x-s}" y1="${y}" x2="${x+s}" y2="${y}"/><line x1="${x}" y1="${y-s}" x2="${x}" y2="${y+s}"/></g>
+    <circle cx="${x}" cy="${y}" r="${s*0.45}" fill="none" stroke="${INK}" stroke-width="0.5" stroke-opacity="0.5"/>`;
+}
+
+function label(x, y, t, size, anchor = "middle", spacing = "0.42em", color = INK, op = 0.75, weight = 300) {
+  return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Jura" font-weight="${weight}" font-size="${size}"
+    letter-spacing="${spacing}" fill="${color}" fill-opacity="${op}">${t}</text>`;
+}
+
+const grain = `
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="7" stitchTiles="stitch"/>
+    <feColorMatrix values="${GRAIN}"/>
+  </filter>
+  <radialGradient id="vig" cx="50%" cy="45%" r="75%">
+    <stop offset="60%" stop-color="${PAPER}" stop-opacity="0"/>
+    <stop offset="100%" stop-color="${VIG}" stop-opacity="${DARK ? 0.7 : 0.55}"/>
+  </radialGradient>`;
+
+// Espaçamento tipográfico: compensa o tracking final no centro
+function wordmark(cx, y, size, spacingEm) {
+  const shift = size * spacingEm / 2;
+  return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Italiana" font-size="${size}"
+    letter-spacing="${spacingEm}em" fill="${INK}">${NAME}</text>`;
+}
+function serifCaps(cx, y, t, size, spacingEm) {
+  const shift = size * spacingEm / 2;
+  return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Italiana" font-size="${size}"
+    letter-spacing="${spacingEm}em" fill="${INK}" fill-opacity="0.92">${t}</text>`;
+}
+function centered(cx, y, t, size, spacingEm, extra = "") {
+  const shift = size * spacingEm / 2;
+  return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Jura" font-weight="300" font-size="${size}"
+    letter-spacing="${spacingEm}em" fill="${INK}" ${extra}>${t}</text>`;
+}
+
+function retrato() {
+  const W = 1240, H = 1754, cx = W / 2, M = 92;
+  let s = `<svg xmlns="${ns}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${grain}</defs>
+    <rect width="${W}" height="${H}" fill="${PAPER}"/><rect width="${W}" height="${H}" fill="url(#vig)"/>`;
+
+  // Moldura de página — fio fino
+  s += `<rect x="${M}" y="${M}" width="${W-2*M}" height="${H-2*M}" fill="none" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.35"/>`;
+  [[M, M], [W-M, M], [M, H-M], [W-M, H-M]].forEach(([x, y]) => s += cross(x, y, 9));
+
+  // Cabeçalho
+  s += label(M + 38, M + 58, "Nº 01", 13, "start", "0.38em");
+  s += label(W - M - 38, M + 58, "MMXXVI", 13, "end", "0.38em");
+  s += `<path d="M${cx},${M+48} l5,5 l-5,5 l-5,-5 Z" fill="${BRASS}"/>`;
+
+  // O limiar
+  const by = 1046, w = 470, hx = cx + 95;
+  const hs = house(hx, by, w, 400, 250, { n: 36, ratio: 0.933, gap: 24, base: 0, tick: 11, k: 1 });
+  s += hs.svg;
+  // Chão contínuo com régua, do leão até a casa
+  const gl = 205, gr = 1035;
+  s += `<line x1="${gl}" y1="${by}" x2="${gr}" y2="${by}" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.8"/>`;
+  for (let x = gl, k = 0; x <= gr + 0.01; x += 11, k++) {
+    const len = k % 10 === 0 ? 9 : (k % 5 === 0 ? 6 : 3);
+    s += `<line x1="${f(x)}" y1="${by+3}" x2="${f(x)}" y2="${by+3+len}" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.5"/>`;
+  }
+  // O leão, caminhando para casa
+  s += lion(190, by, 1.12);
+
+  // Marca
+  s += wordmark(cx, 1236, 150, 0.30);
+  s += serifCaps(cx, 1312, NAME2, 46, 0.52);
+  s += `<line x1="${cx-150}" y1="1362" x2="${cx-40}" y2="1362" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<line x1="${cx+40}" y1="1362" x2="${cx+150}" y2="1362" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<path d="M${cx},1357 l5,5 l-5,5 l-5,-5 Z" fill="none" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += centered(cx, 1416, SUB, 16, 0.62, `fill-opacity="0.85"`);
+
+  // Frase
+  s += `<text x="${cx}" y="1520" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="32"
+          fill="${INK}" fill-opacity="0.82">${TAGLINE}</text>`;
+
+  s += `<rect width="${W}" height="${H}" filter="url(#grain)"/></svg>`;
+  return s;
+}
+
+function banner() {
+  const W = 1640, H = 624, M = 34;
+  let s = `<svg xmlns="${ns}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${grain}</defs>
+    <rect width="${W}" height="${H}" fill="${PAPER}"/><rect width="${W}" height="${H}" fill="url(#vig)"/>`;
+  s += `<rect x="${M}" y="${M}" width="${W-2*M}" height="${H-2*M}" fill="none" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.32"/>`;
+  [[M, M], [W-M, M], [M, H-M], [W-M, H-M]].forEach(([x, y]) => s += cross(x, y, 7));
+
+  // Limiar à direita, texto à esquerda-centro (deixa livre o canto da foto de perfil)
+  const acx = 1360, by = 500;
+  s += house(acx, by, 270, 190, 125, { n: 32, ratio: 0.926, gap: 15, lift: 9, base: 0, tick: 9, k: 0.8 }).svg;
+  const gl = 1040, gr = 1540;
+  s += `<line x1="${gl}" y1="${by}" x2="${gr}" y2="${by}" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.8"/>`;
+  for (let x = gl, k = 0; x <= gr + 0.01; x += 9, k++) {
+    const len = k % 10 === 0 ? 8 : (k % 5 === 0 ? 5 : 3);
+    s += `<line x1="${f(x)}" y1="${by+3}" x2="${f(x)}" y2="${by+3+len}" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.5"/>`;
+  }
+  s += lion(1050, by, 0.6);
+
+  const tx = 720;
+  s += wordmark(tx, 262, 112, 0.30);
+  s += serifCaps(tx, 320, NAME2, 34, 0.52);
+  s += `<line x1="${tx-120}" y1="358" x2="${tx-32}" y2="358" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<line x1="${tx+32}" y1="358" x2="${tx+120}" y2="358" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<path d="M${tx},353 l5,5 l-5,5 l-5,-5 Z" fill="none" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += centered(tx, 400, SUB, 13, 0.62, `fill-opacity="0.85"`);
+  s += `<text x="${tx}" y="466" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="26"
+          fill="${INK}" fill-opacity="0.82">${TAGLINE}</text>`;
+
+  s += label(M + 34, M + 44, "Nº 01", 11, "start", "0.38em");
+  s += label(W - M - 34, M + 44, "MMXXVI", 11, "end", "0.38em");
+  s += `<rect width="${W}" height="${H}" filter="url(#grain)"/></svg>`;
+  return s;
+}
+
+document.getElementById("root").innerHTML = variant === "banner" ? banner() : retrato();
+document.fonts.ready.then(() => document.body.setAttribute("data-ready", "1"));
+</script>
+</body>
+</html>

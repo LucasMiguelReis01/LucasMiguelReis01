@@ -3,10 +3,10 @@ const { chromium } = require('playwright');
 const path = require('path');
 (async () => {
   const b = await chromium.launch();
-  const files = { A: 'capa.html', B: 'capa-b.html', C: 'capa-c.html' };
+  const files = { A: 'capa.html', B: 'capa-b.html', C: 'capa-c.html', D: 'capa-d.html' };
   const jobs = [];
-  for (const c of ['A', 'B', 'C']) for (const t of ['claro', 'escuro']) {
-    const pre = { A: 'capa-reis-imoveis', B: 'capa-B-selo', C: 'capa-C-casa' }[c];
+  for (const c of (process.argv[2] ? process.argv[2].split(',') : ['A', 'B', 'C', 'D'])) for (const t of ['claro', 'escuro']) {
+    const pre = { A: 'capa-reis-imoveis', B: 'capa-B-selo', C: 'capa-C-casa', D: 'capa-D-leao' }[c];
     const suf = t === 'escuro' ? '-escuro' : '';
     jobs.push([c, 'retrato', t, 1240, 1754, `${pre}-retrato${suf}.png`]);
     jobs.push([c, 'banner', t, 1640, 624, `${pre}-banner${suf}.png`]);
