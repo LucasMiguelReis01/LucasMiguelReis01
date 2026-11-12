@@ -29,9 +29,9 @@ const GRAIN = DARK ? "0 0 0 0 0.92  0 0 0 0 0.86  0 0 0 0 0.72  0 0 0 0.07 0"
 document.documentElement.style.background = PAPER;
 
 const NAME    = "REIS";
-const SUB     = "IMÓVEIS";
+const SUB     = "NEGÓCIOS IMOBILIÁRIOS";
 const TAGLINE = "Confiança em cada endereço.";
-const FOOT    = "COMPRA  ·  VENDA  ·  LOCAÇÃO";
+const NAME2   = "IMÓVEIS";
 
 const ns = "http://www.w3.org/2000/svg";
 const f = n => +n.toFixed(2);
@@ -106,6 +106,11 @@ function wordmark(cx, y, size, spacingEm) {
   return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Italiana" font-size="${size}"
     letter-spacing="${spacingEm}em" fill="${INK}">${NAME}</text>`;
 }
+function serifCaps(cx, y, t, size, spacingEm) {
+  const shift = size * spacingEm / 2;
+  return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Italiana" font-size="${size}"
+    letter-spacing="${spacingEm}em" fill="${INK}" fill-opacity="0.92">${t}</text>`;
+}
 function centered(cx, y, t, size, spacingEm, extra = "") {
   const shift = size * spacingEm / 2;
   return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Jura" font-weight="300" font-size="${size}"
@@ -145,18 +150,16 @@ function retrato() {
           font-size="11" letter-spacing="0.4em" fill="${INK}" fill-opacity="0.55">PEDRA ANGULAR</text>`;
 
   // Marca
-  s += wordmark(cx, 1258, 150, 0.30);
-  s += `<line x1="${cx-150}" y1="1312" x2="${cx-40}" y2="1312" stroke="${BRASS}" stroke-width="0.9"/>`;
-  s += `<line x1="${cx+40}" y1="1312" x2="${cx+150}" y2="1312" stroke="${BRASS}" stroke-width="0.9"/>`;
-  s += `<path d="M${cx},1307 l5,5 l-5,5 l-5,-5 Z" fill="none" stroke="${BRASS}" stroke-width="0.9"/>`;
-  s += centered(cx, 1366, SUB, 22, 0.86, `fill-opacity="0.9"`);
+  s += wordmark(cx, 1236, 150, 0.30);
+  s += serifCaps(cx, 1312, NAME2, 46, 0.52);
+  s += `<line x1="${cx-150}" y1="1362" x2="${cx-40}" y2="1362" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<line x1="${cx+40}" y1="1362" x2="${cx+150}" y2="1362" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<path d="M${cx},1357 l5,5 l-5,5 l-5,-5 Z" fill="none" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += centered(cx, 1416, SUB, 16, 0.62, `fill-opacity="0.85"`);
 
   // Frase
-  s += `<text x="${cx}" y="1464" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="34"
+  s += `<text x="${cx}" y="1520" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="32"
           fill="${INK}" fill-opacity="0.82">${TAGLINE}</text>`;
-
-  // Rodapé
-  s += label(cx + 6, H - M - 48, FOOT, 12.5, "middle", "0.5em", INK, 0.62);
 
   s += `<rect width="${W}" height="${H}" filter="url(#grain)"/></svg>`;
   return s;
@@ -174,16 +177,17 @@ function banner() {
   s += threshold(acx, by, w, h, { n: 40, ratio: 0.928, gap: 11, base: 210, tick: 9, k: 0.8 });
 
   const tx = 720;
-  s += wordmark(tx, 300, 118, 0.30);
-  s += `<line x1="${tx-120}" y1="342" x2="${tx-32}" y2="342" stroke="${BRASS}" stroke-width="0.9"/>`;
-  s += `<line x1="${tx+32}" y1="342" x2="${tx+120}" y2="342" stroke="${BRASS}" stroke-width="0.9"/>`;
-  s += `<path d="M${tx},337 l5,5 l-5,5 l-5,-5 Z" fill="none" stroke="${BRASS}" stroke-width="0.9"/>`;
-  s += centered(tx, 390, SUB, 18, 0.86, `fill-opacity="0.9"`);
-  s += `<text x="${tx}" y="456" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="27"
+  s += wordmark(tx, 262, 112, 0.30);
+  s += serifCaps(tx, 320, NAME2, 34, 0.52);
+  s += `<line x1="${tx-120}" y1="358" x2="${tx-32}" y2="358" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<line x1="${tx+32}" y1="358" x2="${tx+120}" y2="358" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<path d="M${tx},353 l5,5 l-5,5 l-5,-5 Z" fill="none" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += centered(tx, 400, SUB, 13, 0.62, `fill-opacity="0.85"`);
+  s += `<text x="${tx}" y="466" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="26"
           fill="${INK}" fill-opacity="0.82">${TAGLINE}</text>`;
 
   s += label(M + 34, M + 44, "Nº 01", 11, "start", "0.38em");
-  s += label(W - M - 34, M + 44, FOOT, 11, "end", "0.42em", INK, 0.6);
+  s += label(W - M - 34, M + 44, "MMXXVI", 11, "end", "0.38em");
   s += `<rect width="${W}" height="${H}" filter="url(#grain)"/></svg>`;
   return s;
 }

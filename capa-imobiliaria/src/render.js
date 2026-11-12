@@ -3,14 +3,16 @@ const { chromium } = require('playwright');
 const path = require('path');
 (async () => {
   const b = await chromium.launch();
-  const base = 'file://' + path.resolve(__dirname, 'capa.html');
+  const files = { A: 'capa.html', B: 'capa-b.html' };
   const jobs = [];
-  for (const t of ['claro', 'escuro']) {
+  for (const c of ['A', 'B']) for (const t of ['claro', 'escuro']) {
+    const pre = c === 'A' ? 'capa-reis-imoveis' : 'capa-B-selo';
     const suf = t === 'escuro' ? '-escuro' : '';
-    jobs.push(['retrato', t, 1240, 1754, `capa-reis-imoveis-retrato${suf}.png`]);
-    jobs.push(['banner', t, 1640, 624, `capa-reis-imoveis-banner${suf}.png`]);
+    jobs.push([c, 'retrato', t, 1240, 1754, `${pre}-retrato${suf}.png`]);
+    jobs.push([c, 'banner', t, 1640, 624, `${pre}-banner${suf}.png`]);
   }
-  for (const [v, t, w, h, out] of jobs) {
+  for (const [c, v, t, w, h, out] of jobs) {
+    const base = 'file://' + path.resolve(__dirname, files[c]);
     const p = await b.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 2 });
     await p.goto(`${base}?v=${v}&t=${t}`);
     await p.waitForSelector('body[data-ready="1"]'); await p.waitForTimeout(300);

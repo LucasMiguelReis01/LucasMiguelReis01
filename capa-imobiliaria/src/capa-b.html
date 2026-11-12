@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Reis Imóveis — Capa</title>
+<style>
+  @font-face { font-family: "Italiana"; src: url("fonts/Italiana-Regular.ttf"); }
+  @font-face { font-family: "InstrumentSerif"; src: url("fonts/InstrumentSerif-Italic.ttf"); font-style: italic; }
+  @font-face { font-family: "Jura"; src: url("fonts/Jura-Light.ttf"); font-weight: 300; }
+  @font-face { font-family: "Jura"; src: url("fonts/Jura-Medium.ttf"); font-weight: 500; }
+  html, body { margin: 0; padding: 0; background: #F1ECE2; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const params = new URLSearchParams(location.search);
+const variant = params.get("v") || "retrato";
+
+// Paleta
+const DARK = params.get("t") === "escuro";
+const PAPER = DARK ? "#16231E" : "#F1ECE2";   // verde-floresta profundo | marfim
+const INK   = DARK ? "#DCC9A0" : "#1E2B26";   // champanhe | verde quase negro
+const BRASS = DARK ? "#C59A55" : "#A6824E";   // ouro velho | latão envelhecido
+const VIG   = DARK ? "#0A120F" : "#D9D0BF";
+const GRAIN = DARK ? "0 0 0 0 0.92  0 0 0 0 0.86  0 0 0 0 0.72  0 0 0 0.07 0"
+                   : "0 0 0 0 0.12  0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0.09 0";
+document.documentElement.style.background = PAPER;
+
+const NAME    = "REIS";
+const SUB     = "NEGÓCIOS IMOBILIÁRIOS";
+const TAGLINE = "Confiança em cada endereço.";
+const NAME2   = "IMÓVEIS";
+
+const ns = "http://www.w3.org/2000/svg";
+const f = n => +n.toFixed(2);
+
+function archPath(cx, by, w, h) {
+  const r = w / 2, sy = by - h + r;
+  return `M${f(cx-r)},${f(by)} L${f(cx-r)},${f(sy)} A${f(r)},${f(r)} 0 0 1 ${f(cx+r)},${f(sy)} L${f(cx+r)},${f(by)}`;
+}
+
+// O limiar: arcos aninhados convergindo para o centro da soleira
+function threshold(cx, by, w, h, opts = {}) {
+  const n = opts.n || 44, ratio = opts.ratio || 0.935;
+  let out = "";
+  for (let i = 0; i < n; i++) {
+    const s = Math.pow(ratio, i);
+    const t = i / (n - 1);
+    const op = 0.92 - 0.62 * t;
+    const sw = i === 0 ? 1.4 : 0.75;
+    out += `<path d="${archPath(cx, by, w * s, h * s)}" fill="none" stroke="${INK}" stroke-width="${sw}" stroke-opacity="${f(op)}"/>`;
+  }
+  // Moldura externa dupla (batente)
+  const g = opts.gap || 14;
+  out += `<path d="${archPath(cx, by, w + 2*g, h + g)}" fill="none" stroke="${INK}" stroke-width="0.7" stroke-opacity="0.55"/>`;
+
+  // Pedra angular (keystone) — o que sustenta o arco
+  const ky = by - h - g / 2, kt = opts.k || 1;
+  const kw1 = 30*kt, kw2 = 18*kt, kh = 40*kt;
+  const top = ky - kh*0.42, bot = ky + kh*0.58;
+  out += `<path d="M${f(cx-kw1/2)},${f(top)} L${f(cx+kw1/2)},${f(top)} L${f(cx+kw2/2)},${f(bot)} L${f(cx-kw2/2)},${f(bot)} Z"
+           fill="${PAPER}" stroke="${BRASS}" stroke-width="1.1"/>`;
+  out += `<path d="M${f(cx-kw1/2+5*kt)},${f(top+5*kt)} L${f(cx+kw1/2-5*kt)},${f(top+5*kt)} L${f(cx+kw2/2-3*kt)},${f(bot-5*kt)} L${f(cx-kw2/2+3*kt)},${f(bot-5*kt)} Z"
+           fill="${BRASS}" fill-opacity="0.85"/>`;
+
+  // Soleira: linha de base com régua
+  const half = opts.base || w * 0.95;
+  out += `<line x1="${f(cx-half)}" y1="${by}" x2="${f(cx+half)}" y2="${by}" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.8"/>`;
+  const step = opts.tick || 12;
+  for (let x = -half; x <= half + 0.01; x += step) {
+    const k = Math.round(x / step);
+    const len = k % 10 === 0 ? 9 : (k % 5 === 0 ? 6 : 3);
+    out += `<line x1="${f(cx+x)}" y1="${by+3}" x2="${f(cx+x)}" y2="${by+3+len}" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.5"/>`;
+  }
+  // Ponto de chegada
+  out += `<circle cx="${cx}" cy="${by}" r="${3.2*kt}" fill="${BRASS}"/>`;
+  return out;
+}
+
+function cross(x, y, s = 7) {
+  return `<g stroke="${INK}" stroke-width="0.6" stroke-opacity="0.55">
+    <line x1="${x-s}" y1="${y}" x2="${x+s}" y2="${y}"/><line x1="${x}" y1="${y-s}" x2="${x}" y2="${y+s}"/></g>
+    <circle cx="${x}" cy="${y}" r="${s*0.45}" fill="none" stroke="${INK}" stroke-width="0.5" stroke-opacity="0.5"/>`;
+}
+
+function label(x, y, t, size, anchor = "middle", spacing = "0.42em", color = INK, op = 0.75, weight = 300) {
+  return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Jura" font-weight="${weight}" font-size="${size}"
+    letter-spacing="${spacing}" fill="${color}" fill-opacity="${op}">${t}</text>`;
+}
+
+const grain = `
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="7" stitchTiles="stitch"/>
+    <feColorMatrix values="${GRAIN}"/>
+  </filter>
+  <radialGradient id="vig" cx="50%" cy="45%" r="75%">
+    <stop offset="60%" stop-color="${PAPER}" stop-opacity="0"/>
+    <stop offset="100%" stop-color="${VIG}" stop-opacity="${DARK ? 0.7 : 0.55}"/>
+  </radialGradient>`;
+
+// Espaçamento tipográfico: compensa o tracking final no centro
+function wordmark(cx, y, size, spacingEm) {
+  const shift = size * spacingEm / 2;
+  return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Italiana" font-size="${size}"
+    letter-spacing="${spacingEm}em" fill="${INK}">${NAME}</text>`;
+}
+function serifCaps(cx, y, t, size, spacingEm) {
+  const shift = size * spacingEm / 2;
+  return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Italiana" font-size="${size}"
+    letter-spacing="${spacingEm}em" fill="${INK}" fill-opacity="0.92">${t}</text>`;
+}
+function centered(cx, y, t, size, spacingEm, extra = "") {
+  const shift = size * spacingEm / 2;
+  return `<text x="${f(cx + shift)}" y="${y}" text-anchor="middle" font-family="Jura" font-weight="300" font-size="${size}"
+    letter-spacing="${spacingEm}em" fill="${INK}" ${extra}>${t}</text>`;
+}
+
+
+// ===== Conceito B — "Selo" : guilhoché de escritura + monograma =====
+function rosette(cx, cy, R, A, k, n, sw, op, color) {
+  let out = "";
+  for (let i = 0; i < n; i++) {
+    const ph = (i / n) * (2 * Math.PI / k);
+    let d = "";
+    const N = 720;
+    for (let j = 0; j <= N; j++) {
+      const t = (j / N) * 2 * Math.PI;
+      const r = R + A * Math.sin(k * t + ph * k);
+      const x = cx + r * Math.cos(t), y = cy + r * Math.sin(t);
+      d += (j ? "L" : "M") + f(x) + "," + f(y);
+    }
+    out += `<path d="${d}Z" fill="none" stroke="${color}" stroke-width="${sw}" stroke-opacity="${op}"/>`;
+  }
+  return out;
+}
+
+function seal(cx, cy, S) {
+  let s = "";
+  // Anéis externos
+  s += `<circle cx="${cx}" cy="${cy}" r="${f(S*1.0)}" fill="none" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.8"/>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="${f(S*0.975)}" fill="none" stroke="${INK}" stroke-width="0.5" stroke-opacity="0.5"/>`;
+  // Texto circular
+  const tr = S * 0.905;
+  s += `<defs><path id="ring" d="M${f(cx)},${f(cy+tr)} A${f(tr)},${f(tr)} 0 1 1 ${f(cx)},${f(cy-tr)} A${f(tr)},${f(tr)} 0 1 1 ${f(cx)},${f(cy+tr)}"/></defs>`;
+  const ringTxt = "REIS IMÓVEIS   ·   NEGÓCIOS IMOBILIÁRIOS   ·   CONFIANÇA   ·   SEGURANÇA   ·   ";
+  s += `<text font-family="Jura" font-weight="300" font-size="${f(S*0.046)}" letter-spacing="${f(S*0.0185)}" fill="${INK}" fill-opacity="0.8">
+          <textPath href="#ring" textLength="${f(2*Math.PI*tr - S*0.02)}" lengthAdjust="spacing">${ringTxt}</textPath></text>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="${f(S*0.835)}" fill="none" stroke="${INK}" stroke-width="0.5" stroke-opacity="0.5"/>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="${f(S*0.815)}" fill="none" stroke="${INK}" stroke-width="0.9" stroke-opacity="0.75"/>`;
+  // Guilhoché — duas camadas entrelaçadas
+  s += rosette(cx, cy, S*0.66, S*0.13, 12, 16, 0.5, 0.6, INK);
+  s += rosette(cx, cy, S*0.47, S*0.08, 16, 12, 0.55, 0.85, BRASS);
+  // Miolo
+  s += `<circle cx="${cx}" cy="${cy}" r="${f(S*0.36)}" fill="${PAPER}" stroke="${BRASS}" stroke-width="1.1"/>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="${f(S*0.335)}" fill="none" stroke="${INK}" stroke-width="0.5" stroke-opacity="0.6"/>`;
+  // Monograma R
+  s += `<text x="${cx}" y="${f(cy + S*0.15)}" text-anchor="middle" font-family="Italiana" font-size="${f(S*0.44)}" fill="${INK}">R</text>`;
+  // Marcas cardeais
+  [[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy]) => {
+    const x = cx + dx*S*1.06, y = cy + dy*S*1.06;
+    s += `<path d="M${f(x)},${f(y-5)} l5,5 l-5,5 l-5,-5 Z" fill="${BRASS}"/>`;
+  });
+  return s;
+}
+
+function nameStack(cx, y0, k) {
+  let s = "";
+  s += wordmark(cx, y0, 150*k, 0.30);
+  s += serifCaps(cx, f(y0 + 76*k), NAME2, 46*k, 0.52);
+  const dy = f(y0 + 126*k);
+  s += `<line x1="${f(cx-150*k)}" y1="${dy}" x2="${f(cx-40*k)}" y2="${dy}" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<line x1="${f(cx+40*k)}" y1="${dy}" x2="${f(cx+150*k)}" y2="${dy}" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += `<path d="M${cx},${f(dy-5)} l5,5 l-5,5 l-5,-5 Z" fill="none" stroke="${BRASS}" stroke-width="0.9"/>`;
+  s += centered(cx, f(y0 + 180*k), SUB, 16*k, 0.62, `fill-opacity="0.85"`);
+  return s;
+}
+
+function retrato() {
+  const W = 1240, H = 1754, cx = W / 2, M = 92;
+  let s = `<svg xmlns="${ns}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${grain}</defs>
+    <rect width="${W}" height="${H}" fill="${PAPER}"/><rect width="${W}" height="${H}" fill="url(#vig)"/>`;
+  s += `<rect x="${M}" y="${M}" width="${W-2*M}" height="${H-2*M}" fill="none" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.35"/>`;
+  s += `<rect x="${M+10}" y="${M+10}" width="${W-2*M-20}" height="${H-2*M-20}" fill="none" stroke="${BRASS}" stroke-width="0.6" stroke-opacity="0.6"/>`;
+  s += label(M + 44, M + 64, "Nº 01", 13, "start", "0.38em");
+  s += label(W - M - 44, M + 64, "MMXXVI", 13, "end", "0.38em");
+  s += seal(cx, 640, 330);
+  s += nameStack(cx, 1236, 1);
+  s += `<text x="${cx}" y="1520" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="32"
+          fill="${INK}" fill-opacity="0.82">${TAGLINE}</text>`;
+  s += `<rect width="${W}" height="${H}" filter="url(#grain)"/></svg>`;
+  return s;
+}
+
+function banner() {
+  const W = 1640, H = 624, M = 34;
+  let s = `<svg xmlns="${ns}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${grain}</defs>
+    <rect width="${W}" height="${H}" fill="${PAPER}"/><rect width="${W}" height="${H}" fill="url(#vig)"/>`;
+  s += `<rect x="${M}" y="${M}" width="${W-2*M}" height="${H-2*M}" fill="none" stroke="${INK}" stroke-width="0.6" stroke-opacity="0.32"/>`;
+  s += `<rect x="${M+8}" y="${M+8}" width="${W-2*M-16}" height="${H-2*M-16}" fill="none" stroke="${BRASS}" stroke-width="0.6" stroke-opacity="0.55"/>`;
+  s += seal(1250, 312, 205);
+  const tx = 720;
+  s += nameStack(tx, 262, 0.75);
+  s += `<text x="${tx}" y="466" text-anchor="middle" font-family="InstrumentSerif" font-style="italic" font-size="26"
+          fill="${INK}" fill-opacity="0.82">${TAGLINE}</text>`;
+  s += label(M + 40, M + 50, "Nº 01", 11, "start", "0.38em");
+  s += label(W - M - 40, M + 50, "MMXXVI", 11, "end", "0.38em");
+  s += `<rect width="${W}" height="${H}" filter="url(#grain)"/></svg>`;
+  return s;
+}
+
+document.getElementById("root").innerHTML = variant === "banner" ? banner() : retrato();
+document.fonts.ready.then(() => document.body.setAttribute("data-ready", "1"));
+</script>
+</body>
+</html>
