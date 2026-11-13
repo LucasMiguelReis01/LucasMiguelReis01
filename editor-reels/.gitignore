@@ -1,0 +1,6 @@
+.modelo/
+teste/
+.transcricao_*.json
+*_reels.ass
+*_reels.srt
+__pycache__/
