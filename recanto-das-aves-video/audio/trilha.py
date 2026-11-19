@@ -10,7 +10,7 @@ SR, DUR = 44100, TL['duration']
 N = int(SR * DUR)
 rng = np.random.default_rng(11)
 BPM = 124; BEAT = 60 / BPM; BAR = BEAT * 4
-DROP, BREAK, CTA = CU['drop'], TL['anchors']['quem'], CU['lines'][7]
+DROP, BREAK, CTA = CU['drop'], CU['brk'], CU['cta']
 
 def t_(d): return np.arange(int(d * SR)) / SR
 def midi(m): return 440 * 2 ** ((m - 69) / 12)
@@ -119,7 +119,7 @@ add(sfx, riser(1.4), CTA - 1.4, .14); add(sfx, impact(1.2), CTA, .35)
 add(sfx, bell(1318.5, 1.6), CU['wa'], .14); add(sfx, bell(1975.5, 1.2), CU['wa'] + .12, .09)
 add(sfx, impact(1.3), DUR - 1.1, .3)
 birds = np.zeros((N, 2))
-for at, base, n, g, pan in [(.2, 3300, 6, .06, -.4), (1.5, 4100, 4, .05, .5), (2.8, 3600, 6, .05, -.2), (4.4, 3000, 5, .045, .5)]:
+for at, base, n, g, pan in [(.15, 3300, 6, .06, -.4), (1.2, 4100, 4, .05, .5), (2.3, 3600, 5, .045, -.2)]:
     t = at
     for k in range(n):
         d = rng.uniform(.06, .12); f0 = base * rng.uniform(.9, 1.15)

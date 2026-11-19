@@ -11,23 +11,22 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 VOICE = sys.argv[1] if len(sys.argv) > 1 else 'LqFVmWbm4eksPPIUSMaE'  # "Leão Reis."
 MODEL = 'eleven_multilingual_v2'
-SPEED = 1.15
+SPEED = 1.2
 SR = 44100
-START, GAP, END_HOLD = 0.35, 0.12, 2.2
+START, GAP, END_HOLD = 0.25, 0.06, 2.6
 SETTINGS = {'stability': 0.32, 'similarity_boost': 0.8, 'style': 0.5, 'use_speaker_boost': True, 'speed': SPEED}
 
 # (texto, {âncora: trecho falado})
 LINES = [
-    ("Imagina acordar com passarinho cantando... seus filhos brincando na grama... num lugar que é seu.",
-     {'passarinho': 'passarinho', 'filhos': 'filhos', 'lugar': 'num lugar'}),
-    ("Esse é o Recanto das Aves, em Mogi das Cruzes!", {'logo': 'Recanto', 'mogi': 'Mogi'}),
-    ("Lotes a partir de setenta e cinco mil reais!", {'lotes': 'Lotes', 'preco': 'setenta'}),
-    ("Sem Serasa. Sem banco. Direto com o dono.", {'c1': 'Sem Serasa', 'c2': 'Sem banco', 'c3': 'Direto'}),
-    ("Entrada facilitada, e aceita até carro ou moto.", {'ent': 'Entrada', 'carro': 'carro', 'moto': 'moto'}),
-    ("E já dá pra construir! É condomínio de chácaras, com acesso por entrada privativa.",
-     {'constr': 'construir', 'cond': 'condomínio', 'acesso': 'acesso', 'priv': 'privativa'}),
-    ("São só quarenta e seis lotes. Quem chegar primeiro, escolhe o melhor.", {'n46': 'quarenta', 'quem': 'Quem'}),
-    ("Chama no WhatsApp agora: onze, nove três sete zero zero, quatro dois nove cinco.", {'wa': 'WhatsApp', 'num': 'onze'}),
+    ("Imagina ter o seu lote no meio da natureza, a cinco minutos da Avenida Japão?",
+     {'natureza': 'natureza', 'japao': 'cinco minutos'}),
+    ("É o Recanto das Aves: condomínio de chácaras no Santo Ângelo, em Mogi!",
+     {'logo': 'Recanto', 'cond': 'condomínio', 'bairro': 'Santo'}),
+    ("A partir de setenta e cinco mil, com só vinte mil de entrada!", {'lotes': 'A partir', 'preco': 'setenta', 'entrada': 'vinte'}),
+    ("O resto, parcelado direto com o proprietário. Sem Serasa e sem banco!",
+     {'parc': 'parcelado', 'prop': 'proprietário', 'c1': 'Sem Serasa', 'c2': 'sem banco'}),
+    ("Já pode construir, e são só quarenta e seis lotes!", {'constr': 'construir', 'n46': 'quarenta'}),
+    ("Chama no WhatsApp agora!", {'wa': 'WhatsApp', 'num': 'agora'}),
 ]
 
 def tts(text, prev, nxt):
