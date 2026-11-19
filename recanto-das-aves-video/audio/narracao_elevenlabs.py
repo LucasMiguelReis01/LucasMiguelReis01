@@ -24,8 +24,8 @@ LINES = [
     ("Lotes a partir de setenta e cinco mil reais!", {'lotes': 'Lotes', 'preco': 'setenta'}),
     ("Sem Serasa. Sem banco. Direto com o dono.", {'c1': 'Sem Serasa', 'c2': 'Sem banco', 'c3': 'Direto'}),
     ("Entrada facilitada, e aceita até carro ou moto.", {'ent': 'Entrada', 'carro': 'carro', 'moto': 'moto'}),
-    ("E já dá pra construir! As ruas tão sendo abertas, e a região vai ganhar nove milhões em asfalto.",
-     {'constr': 'construir', 'ruas': 'ruas', 'regiao': 'região', 'nove': 'nove'}),
+    ("E já dá pra construir! É condomínio de chácaras, com acesso por entrada privativa.",
+     {'constr': 'construir', 'cond': 'condomínio', 'acesso': 'acesso', 'priv': 'privativa'}),
     ("São só quarenta e seis lotes. Quem chegar primeiro, escolhe o melhor.", {'n46': 'quarenta', 'quem': 'Quem'}),
     ("Chama no WhatsApp agora: onze, nove três sete zero zero, quatro dois nove cinco.", {'wa': 'WhatsApp', 'num': 'onze'}),
 ]

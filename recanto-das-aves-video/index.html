@@ -90,21 +90,26 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;color:#fff;
     <div class="anton" style="font-size:64px;margin-top:18px">Moto</div>
   </div>
 
-  <!-- 6 · construir + R$ 9 mi -->
-  <div class="ov" data-in="ruas-.05" data-out="nove-.1" data-fx="pop" style="top:300px">
-    <div class="pill" style="background:rgba(6,18,42,.75);border:2px solid rgba(255,255,255,.4);font-size:30px"><i style="width:18px;height:18px;border-radius:50%;background:var(--red)"></i>Imagens reais · ruas sendo abertas</div>
+  <!-- 6 · construir + condomínio + entrada privativa -->
+  <div class="ov" data-in="constr-.2" data-out="n46-.3" data-fx="pop" style="top:300px">
+    <div class="pill" style="background:rgba(6,18,42,.75);border:2px solid rgba(255,255,255,.4);font-size:30px"><i style="width:18px;height:18px;border-radius:50%;background:var(--red)"></i>Imagens reais da obra</div>
   </div>
-  <div class="ov" data-in="constr-.3" data-out="nove-.1" data-fx="slam" style="top:420px">
+  <div class="ov" data-in="constr-.3" data-out="cond-.08" data-fx="slam" style="top:420px">
     <div class="anton big" style="font-size:180px">Já pode</div>
     <div class="anton big y" style="font-size:200px">construir</div>
   </div>
-  <div class="ov" data-in="nove-.08" data-out="n46-.3" data-fx="slam" style="top:380px">
-    <div class="anton" style="font-size:70px">Valorização na região</div>
-    <div class="anton big y" style="font-size:230px;margin-top:10px">R$ 9 MI</div>
-    <div class="anton" style="font-size:80px">em asfalto</div>
+  <div class="ov" data-in="cond-.08" data-out="acesso-.08" data-fx="slam" style="top:430px">
+    <div class="anton big" style="font-size:160px">Condomínio</div>
+    <div class="anton big y" style="font-size:190px">de chácaras</div>
   </div>
-  <div class="ov" data-in="nove+.6" data-out="n46-.3" data-fx="up" style="top:930px">
-    <div class="pill" style="background:rgba(255,255,255,.95);color:var(--navy);font-size:30px">Santo Ângelo ↔ Pq. São Martinho</div>
+  <div class="ov" data-in="acesso-.05" data-out="n46-.3" data-fx="pop" style="top:400px">
+    <div class="icon" style="width:220px;height:220px"><svg width="170" height="170" viewBox="0 0 24 24" fill="none" stroke="#0a1a35" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-5 9 5v12"/><path d="M6 21v-9h12v9M9 12v9M12 12v9M15 12v9"/><rect x="10.5" y="15" width="3" height="2.6" rx=".5" fill="#ffd23f" stroke="#0a1a35"/></svg></div>
+  </div>
+  <div class="ov" data-in="acesso-.02" data-out="n46-.3" data-fx="up" style="top:660px">
+    <div class="anton" style="font-size:96px">Acesso com</div>
+  </div>
+  <div class="ov" data-in="priv-.3" data-out="n46-.3" data-fx="slam" style="top:790px">
+    <div class="box anton" style="font-size:96px;transform:rotate(-2deg)">Entrada privativa</div>
   </div>
 
   <!-- 7 · escassez -->
@@ -179,10 +184,9 @@ const SHOTS = [
   S(A.c3 - .05,      { seq: 'drone4', n: 240, from: 100, speed: 2, dim: .3 }),
   S(L[4] - .05,      { seq: 'drone3', n: 210, from: 120, speed: 1.5, dim: .4 }),
   S(A.carro - .05,   { seq: 'drone1', n: 240, from: 170, speed: 1.5, dim: .4 }),
-  S(L[5] - .05,      { seq: 'drone2', n: 210, speed: 1.5, dim: .3, z: [1.15, 1.0] }),
-  S(A.ruas - .05,    { seq: 'obra11', n: 290, speed: 1.3, dim: .25 }),
-  S(A.regiao - .05,  { seq: 'drone4', n: 240, speed: 2, dim: .3 }),
-  S(A.nove - .05,    { seq: 'drone2', n: 210, from: 100, dim: .5, z: [1.0, 1.15] }),
+  S(L[5] - .05,      { seq: 'obra11', n: 290, speed: 1.3, dim: .3, z: [1.15, 1.0] }),
+  S(A.cond - .05,    { seq: 'drone3', n: 210, from: 30, speed: 1.6, dim: .4, warm: 1 }),
+  S(A.acesso - .05,  { seq: 'drone2', n: 210, from: 60, dim: .4, z: [1.0, 1.15] }),
   S(L[6] - .05,      { img: 'assets/planta.jpg', pos: '50% 50%', z: [1.7, 1.05], dim: .55, pan: [380, 0] }),
   S(A.quem - .05,    { seq: 'drone3', n: 210, speed: 2, dim: .45 }),
   S(L[7] - .05,      { seq: 'drone1', n: 240, speed: .9, dim: .62, z: [1.05, 1.25] }),
@@ -266,8 +270,8 @@ function drawOverlays(t) {
 }
 
 /* ---------------- tremida, flash, moedas ---------------- */
-const SHAKES = [[T('logo'), 16], [T('preco'), 24], [T('nove'), 20], [T('quem'), 12], [T('wa'), 14]];
-const FLASHES = [[T('logo') - .1, .65], [T('preco') - .08, .45], [T('constr') - .3, .3], [T('nove') - .08, .45], [L[7], .3]];
+const SHAKES = [[T('logo'), 16], [T('preco'), 24], [T('cond'), 18], [T('quem'), 12], [T('wa'), 14]];
+const FLASHES = [[T('logo') - .1, .65], [T('preco') - .08, .45], [T('constr') - .3, .3], [T('cond') - .08, .4], [L[7], .3]];
 const coinsEl = document.getElementById('coins'), COINS = [];
 for (let i = 0; i < 26; i++) {
   const c = document.createElement('div'); c.className = 'coin'; coinsEl.appendChild(c);
