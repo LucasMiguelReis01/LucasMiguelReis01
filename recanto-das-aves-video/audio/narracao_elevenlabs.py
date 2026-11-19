@@ -25,8 +25,8 @@ LINES = [
     ("A partir de setenta e cinco mil, com só vinte mil de entrada!", {'lotes': 'A partir', 'preco': 'setenta', 'entrada': 'vinte'}),
     ("O resto, parcelado direto com o proprietário. Sem Serasa e sem banco!",
      {'parc': 'parcelado', 'prop': 'proprietário', 'c1': 'Sem Serasa', 'c2': 'sem banco'}),
-    ("Aceita carro ou moto na entrada, e são só quarenta e seis lotes!",
-     {'veic': 'Aceita', 'carro': 'carro', 'moto': 'moto', 'n46': 'quarenta'}),
+    ("Aceita carro ou moto na entrada, e restam só trinta e quatro lotes!",
+     {'veic': 'Aceita', 'carro': 'carro', 'moto': 'moto', 'n46': 'restam'}),
     ("Chama no WhatsApp agora!", {'wa': 'WhatsApp', 'num': 'agora'}),
 ]
 
