@@ -126,14 +126,30 @@ def impact():
 # transições de cena
 for i, t in enumerate(SC[1:7]):
     add(sfx, whoosh(0.8), t - 0.4, 0.16, pan=-0.5 if i % 2 else 0.5)
-add(sfx, whoosh(1.2), 0.0, 0.18)
+# (abertura suave: sem whoosh)
 # títulos revelados (whoosh curto e suave)
-for t in [1.0] + [s + 0.6 for s in SC[1:7]] + [SC[7] + 0.3]:
+for t in [s + 0.6 for s in SC[1:7]] + [SC[7] + 0.3]:
     add(sfx, whoosh(0.45, up=False), t, 0.09)
-# itens que aparecem (pop): valores da cena 2, números da cena 4, títulos
-for t, f in [(rt(2, .5), 880), (rt(2, 1.7), 784), (rt(2, 2.5), 880), (rt(2, 3.3), 988),
-             (rt(4, 2.3), 988), (rt(4, 2.5), 1175), (rt(4, 3.5), 1318.5), (rt(5, .5), 880),
-             (rt(7, 1.1), 988), (anc('s8.wa') + .6, 1175), (rt(8, .1), 880)]:
+# canto de passarinhos (abertura e fechamento emocional)
+def chirp(f0, f1, d):
+    tt = t_(d); f = f0 + (f1 - f0) * (tt / d) ** 0.6 + 180 * np.sin(2 * np.pi * 38 * tt)
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * tt / d) ** 1.5
+def song(at, base, n, gain, pan):
+    t = at
+    for k in range(n):
+        d = rng.uniform(0.06, 0.13); f0 = base * rng.uniform(0.9, 1.15); f1 = f0 * rng.uniform(1.15, 1.5)
+        add(sfx, chirp(f0, f1, d), t, gain, pan); t += d + rng.uniform(0.03, 0.09)
+    return t
+birds = np.zeros((N, 2)); sfx_saved = sfx; sfx = birds
+for at, base, n, g, pan in [(0.15, 3200, 6, .07, -.4), (1.4, 4100, 4, .05, .5), (2.6, 3600, 7, .06, -.2),
+                            (4.3, 2900, 5, .05, .6), (6.0, 3900, 6, .05, -.5), (8.2, 3400, 5, .04, .3)]:
+    song(at, base, n, g, pan)
+for at, base, n, g, pan in [(SC[6] + .3, 3500, 6, .05, -.4), (SC[6] + 1.8, 4000, 5, .04, .5), (SC[6] + 3.2, 3100, 6, .04, -.2)]:
+    song(at, base, n, g, pan)
+sfx = sfx_saved + reverb(birds, 1.8, 0.35)
+# itens que aparecem (pop)
+for t, f in [(rt(4, 2.3), 988), (rt(4, 2.5), 1175), (rt(4, 3.5), 1318.5), (rt(5, .5), 880),
+             (anc('s8.wa') + .6, 1175), (rt(8, .1), 880)]:
     add(sfx, pop(f), t + 0.05, 0.16)
 # checks em escada ascendente
 for t, f in zip([anc(f's6.c{i}') for i in range(1, 5)], [784, 880, 988, 1175]):
@@ -143,13 +159,14 @@ N46 = anc('s4.n46') + 0.15
 for k in range(10):
     add(sfx, tick(), N46 + 1.4 * (1 - (1 - k / 10) ** 0.5) * 0.9, 0.08, pan=0.2)
 add(sfx, bell(1568), N46 + 1.3, 0.12)
-# preço (cenas 1 e 5), R$ 9 milhões e WhatsApp
-for name in ('s1.preco', 's5.preco', 's7.n9', 's8.wa'):
+# revelação do logo: impacto suave; preços e WhatsApp: sino
+add(sfx, riser(1.4), anc('s2.logo') - 1.3, 0.1); add(sfx, impact(), anc('s2.logo'), 0.3)
+for name in ('s2.preco', 's5.preco', 's8.wa'):
     t = anc(name); add(sfx, bell(1568), t, 0.15); add(sfx, bell(1975.5), t + 0.12, 0.09)
-add(sfx, impact(), anc('s7.n9'), 0.25)
+add(sfx, bell(1318.5, 2.2), anc('s7.b'), 0.1)
 # subida para o final + impacto
 add(sfx, riser(1.6), SC[7] - 1.6, 0.16); add(sfx, impact(), SC[7], 0.45)
-add(sfx, impact(), 0.05, 0.3)
+
 sfx = reverb(sfx, 1.4, 0.2)
 
 # ------------------------------------------------------------------ NARRAÇÃO + MIX

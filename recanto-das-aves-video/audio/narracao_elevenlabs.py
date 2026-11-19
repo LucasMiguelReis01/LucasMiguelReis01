@@ -18,21 +18,21 @@ MODEL = 'eleven_multilingual_v2'
 SPEED = 1.08
 SR = 44100
 LEAD, TAIL = 0.5, 0.4           # respiro antes/depois da fala em cada cena
-MAX_TOTAL = 59.5
+MAX_TOTAL = 60.0
 
 # (texto, duração mínima da cena, âncoras {nome: trecho falado}, ocorrência a partir de)
 SCENES = [
-    ("Lote em condomínio de chácaras, em Mogi das Cruzes, a partir de setenta e cinco mil reais.", 4.5,
-     {'s1.preco': 'setenta e cinco'}),
-    ("Esse é o Recanto das Aves: natureza, tranquilidade e liberdade pra viver.", 4.0, {}),
+    ("Imagina acordar com o canto dos passarinhos... ver seus filhos correndo descalços na grama... e saber que esse pedaço de chão é seu.", 8.0,
+     {'s1.a': 'canto', 's1.b': 'filhos', 's1.c': 'saber'}),
+    ("Isso existe, e cabe no bolso: Recanto das Aves, em Mogi, a partir de setenta e cinco mil.", 6.5,
+     {'s2.logo': 'Recanto', 's2.preco': 'setenta e cinco'}),
     ("E não fica só no papel: as obras já estão em andamento.", 5.0, {}),
-    ("São quarenta e seis lotes, de duzentos a oitocentos e setenta e dois metros quadrados.", 5.0,
+    ("São quarenta e seis lotes, de duzentos a quase novecentos metros.", 4.5,
      {'s4.n46': 'quarenta e seis'}),
-    ("Escolha o seu na planta: lotes de duzentos e cinquenta metros, a partir de setenta e cinco mil.", 5.0,
-     {'s5.preco': 'setenta e cinco'}),
+    ("Escolha o seu direto na planta.", 4.5, {'s5.preco': 'planta'}),
     ("Direto com os proprietários, sem Serasa e sem banco. Entrada facilitada, e aceita carro ou moto na entrada.", 5.5,
      {'s6.c1': 'Direto', 's6.c2': 'sem Serasa', 's6.c3': 'Entrada', 's6.c4': 'carro'}),
-    ("E Mogi não para: quase nove milhões aprovados em pavimentação.", 4.0, {'s7.n9': 'nove'}),
+    ("Chega de adiar esse sonho. O seu cantinho tá te esperando.", 4.5, {'s7.b': 'O seu'}),
     ("Garanta o seu lote! Chama no WhatsApp: onze, nove três sete zero zero, quatro dois nove cinco.", 6.0,
      {'s8.wa': 'WhatsApp'}),
 ]

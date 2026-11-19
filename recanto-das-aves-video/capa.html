@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Capa Recanto das Aves</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Poppins:wght@600;700;800&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1920px;overflow:hidden;background:#0a1a35;font-family:Poppins,sans-serif;color:#f7f1e3}
+.img{position:absolute;inset:0;background:url(assets/aereo-ilustrativo.jpg) 18% 100%/auto 2300px}
+.bird{position:absolute;left:-60px;top:120px;width:760px;height:800px;background:url(assets/passaro.jpg) 88% 0%/cover;
+  -webkit-mask-image:radial-gradient(60% 58% at 48% 42%,#000 50%,transparent 72%)}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,26,53,.85) 0%,rgba(10,26,53,.25) 30%,rgba(10,26,53,.35) 48%,rgba(10,26,53,.95) 66%,#0a1a35 100%)}
+.glow{position:absolute;inset:0;background:radial-gradient(55% 35% at 80% 20%,rgba(255,196,110,.55),transparent 70%);mix-blend-mode:screen}
+.top{position:absolute;left:0;right:0;top:250px;text-align:center}
+.tag{display:inline-block;padding:14px 34px;border-radius:999px;background:#e04a3f;font-weight:800;font-size:34px;letter-spacing:.14em}
+.main{position:absolute;left:60px;right:60px;top:930px;text-align:center}
+.h{font-family:Cinzel,serif;font-weight:900;font-size:120px;line-height:1;text-shadow:0 8px 40px rgba(0,0,0,.6)}
+.gold{background:linear-gradient(180deg,#f6dc95,#d6a849 60%,#b8862e);-webkit-background-clip:text;color:transparent}
+.price{display:inline-flex;align-items:baseline;gap:18px;margin-top:40px;padding:22px 44px;border-radius:28px;background:linear-gradient(180deg,#f2d27e,#d6a849);color:#0a1a35;
+  box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.price small{font-size:34px;font-weight:700}
+.price b{font-family:Cinzel,serif;font-weight:900;font-size:110px;line-height:1}
+.sub{margin-top:34px;font-size:40px;font-weight:700;letter-spacing:.02em}
+.sub span{color:#e2bd62}
+.brand{position:absolute;left:0;right:0;top:1720px;display:flex;justify-content:center;align-items:center;gap:18px;opacity:.85}
+.brand img{width:64px;height:64px;border-radius:50%;border:3px solid #e2bd62}
+.brand b{font-size:28px;letter-spacing:.16em}
+</style></head><body>
+<div class="img"></div><div class="shade"></div><div class="bird"></div><div class="glow"></div>
+<div class="main">
+  <div class="tag" style="margin-bottom:40px">LOTE EM MOGI DAS CRUZES</div>
+  <div class="h">Seu lote<br><span class="gold">na natureza</span></div>
+  <div class="price"><small>a partir de</small><b>R$ 75 MIL</b></div>
+  <div class="sub">Sem Serasa <span>•</span> Sem banco <span>•</span> Direto com o dono</div>
+</div>
+<div class="brand"><img src="assets/leao.png"><b>RECANTO DAS AVES · REIS IMÓVEIS</b></div>
+</body></html>
