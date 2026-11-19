@@ -161,7 +161,8 @@ for k in range(10):
 add(sfx, bell(1568), N46 + 1.3, 0.12)
 # revelação do logo: impacto suave; preços e WhatsApp: sino
 add(sfx, riser(1.4), anc('s2.logo') - 1.3, 0.1); add(sfx, impact(), anc('s2.logo'), 0.3)
-for name in ('s2.preco', 's5.preco', 's8.wa'):
+add(sfx, impact(), anc('s3.n9'), 0.2)
+for name in ('s2.preco', 's3.n9', 's5.preco', 's8.wa'):
     t = anc(name); add(sfx, bell(1568), t, 0.15); add(sfx, bell(1975.5), t + 0.12, 0.09)
 add(sfx, bell(1318.5, 2.2), anc('s7.b'), 0.1)
 # subida para o final + impacto
