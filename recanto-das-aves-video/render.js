@@ -17,6 +17,11 @@ const OUT = path.join(__dirname, 'recanto-das-aves-reels.mp4');
   await page.goto('file://' + path.join(__dirname, 'index.html'));
   await page.evaluate(() => window.ready);
 
+  if (process.argv.includes('--cues')) {
+    const cues = await page.evaluate(() => window.CUES);
+    require('fs').writeFileSync(path.join(__dirname, 'cues.json'), JSON.stringify(cues, null, 1));
+    console.log('cues.json ok'); await browser.close(); return;
+  }
   if (stillsArg > -1) {
     for (const t of process.argv[stillsArg + 1].split(',').map(Number)) {
       await page.evaluate(t => window.seek(t), t);

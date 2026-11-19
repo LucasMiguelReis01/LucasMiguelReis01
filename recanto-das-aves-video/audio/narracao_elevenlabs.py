@@ -1,13 +1,9 @@
-# Gera a narração com ElevenLabs (voz natural pt-BR) e a linha do tempo do vídeo.
-# A chave é injetada pelo proxy do ambiente (cabeçalho xi-api-key).
-#
-# - Cada cena dura o tempo da sua fala (o vídeo se ajusta à voz, não o contrário).
-# - Usa o endpoint /with-timestamps para saber quando cada palavra é dita e
-#   sincronizar elementos ("37", "Entrada", cada condição, WhatsApp) com a fala.
-# - Falas geradas ficam em cache (audio/cache/) para não gastar créditos de novo.
-#
-# Saídas: audio/narracao.wav, timeline.json e timeline.js (lido por index.html).
-# Uso: python3 narracao_elevenlabs.py [voice_id]
+# Narração dinâmica (ElevenLabs, com timestamps por caractere) + linha do tempo.
+# Gera: audio/narracao.wav e timeline.json/timeline.js com
+#   lines   -> início/fim de cada frase
+#   words   -> cada palavra com tempo absoluto (legenda palavra por palavra)
+#   anchors -> momentos-chave (tempo absoluto) para cortes e animações
+# Falas ficam em cache (audio/cache/) para não gastar créditos de novo.
 import sys, os, json, base64, hashlib, subprocess, urllib.request, io
 import numpy as np, soundfile as sf
 
@@ -15,41 +11,32 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 VOICE = sys.argv[1] if len(sys.argv) > 1 else 'LqFVmWbm4eksPPIUSMaE'  # "Leão Reis."
 MODEL = 'eleven_multilingual_v2'
-SPEED = 1.08
+SPEED = 1.15
 SR = 44100
-LEAD, TAIL = 0.5, 0.4           # respiro antes/depois da fala em cada cena
-MAX_TOTAL = 60.0
+START, GAP, END_HOLD = 0.35, 0.12, 2.2
+SETTINGS = {'stability': 0.32, 'similarity_boost': 0.8, 'style': 0.5, 'use_speaker_boost': True, 'speed': SPEED}
 
-# (texto, duração mínima da cena, âncoras {nome: trecho falado}, ocorrência a partir de)
-SCENES = [
-    ("Imagina acordar com o canto dos passarinhos... ver seus filhos correndo descalços na grama... e saber que esse pedaço de chão é seu.", 8.0,
-     {'s1.a': 'canto', 's1.b': 'filhos', 's1.c': 'saber'}),
-    ("Isso existe, e cabe no bolso: Recanto das Aves, em Mogi, a partir de setenta e cinco mil.", 6.5,
-     {'s2.logo': 'Recanto', 's2.preco': 'setenta e cinco'}),
-    ("E já dá pra construir! As ruas tão sendo abertas, e a região vai ganhar quase nove milhões em asfalto.", 6.0,
-     {'s3.n9': 'nove'}),
-    ("São quarenta e seis lotes, de duzentos a quase novecentos metros.", 4.5,
-     {'s4.n46': 'quarenta e seis'}),
-    ("Escolha o seu.", 3.5, {'s5.preco': 'Escolha'}),
-    ("Direto com o dono, sem Serasa e sem banco. Entrada facilitada, e aceita carro ou moto.", 5.5,
-     {'s6.c1': 'Direto', 's6.c2': 'sem Serasa', 's6.c3': 'Entrada', 's6.c4': 'carro'}),
-    ("Chega de adiar esse sonho. O seu cantinho tá te esperando.", 4.5, {'s7.b': 'O seu'}),
-    ("Garanta o seu lote! Chama no WhatsApp: onze, nove três sete zero zero, quatro dois nove cinco.", 6.0,
-     {'s8.wa': 'WhatsApp'}),
+# (texto, {âncora: trecho falado})
+LINES = [
+    ("Imagina acordar com passarinho cantando... seus filhos brincando na grama... num lugar que é seu.",
+     {'passarinho': 'passarinho', 'filhos': 'filhos', 'lugar': 'num lugar'}),
+    ("Esse é o Recanto das Aves, em Mogi das Cruzes!", {'logo': 'Recanto', 'mogi': 'Mogi'}),
+    ("Lotes a partir de setenta e cinco mil reais!", {'lotes': 'Lotes', 'preco': 'setenta'}),
+    ("Sem Serasa. Sem banco. Direto com o dono.", {'c1': 'Sem Serasa', 'c2': 'Sem banco', 'c3': 'Direto'}),
+    ("Entrada facilitada, e aceita até carro ou moto.", {'ent': 'Entrada', 'carro': 'carro', 'moto': 'moto'}),
+    ("E já dá pra construir! As ruas tão sendo abertas, e a região vai ganhar nove milhões em asfalto.",
+     {'constr': 'construir', 'ruas': 'ruas', 'regiao': 'região', 'nove': 'nove'}),
+    ("São só quarenta e seis lotes. Quem chegar primeiro, escolhe o melhor.", {'n46': 'quarenta', 'quem': 'Quem'}),
+    ("Chama no WhatsApp agora: onze, nove três sete zero zero, quatro dois nove cinco.", {'wa': 'WhatsApp', 'num': 'onze'}),
 ]
-CTA_HOLD = 1.5                   # tempo extra no final com o contato na tela
 
 def tts(text, prev, nxt):
-    key = hashlib.sha1(json.dumps([VOICE, MODEL, SPEED, text, prev, nxt]).encode()).hexdigest()[:16]
+    key = hashlib.sha1(json.dumps([VOICE, MODEL, SETTINGS, text, prev, nxt]).encode()).hexdigest()[:16]
     cache = os.path.join(HERE, 'cache', key + '.json')
     if os.path.exists(cache):
         return json.load(open(cache))
-    body = json.dumps({
-        'text': text, 'model_id': MODEL, 'language_code': 'pt',
-        'previous_text': prev, 'next_text': nxt,
-        'voice_settings': {'stability': 0.45, 'similarity_boost': 0.8, 'style': 0.25,
-                           'use_speaker_boost': True, 'speed': SPEED},
-    }).encode()
+    body = json.dumps({'text': text, 'model_id': MODEL, 'language_code': 'pt',
+                       'previous_text': prev, 'next_text': nxt, 'voice_settings': SETTINGS}).encode()
     req = urllib.request.Request(
         f'https://api.elevenlabs.io/v1/text-to-speech/{VOICE}/with-timestamps?output_format=mp3_44100_128',
         data=body, headers={'Content-Type': 'application/json'})
@@ -63,43 +50,45 @@ def decode(b64):
                          input=base64.b64decode(b64), capture_output=True, check=True).stdout
     return sf.read(io.BytesIO(wav))[0]
 
-clips = []
-for i, (text, mn, anchors) in enumerate(SCENES):
-    prev = ' '.join(s[0] for s in SCENES[:i])[-300:]
-    nxt = SCENES[i + 1][0] if i + 1 < len(SCENES) else ''
+t = START
+lines, words, anchors, clips = [], [], {}, []
+for i, (text, anc) in enumerate(LINES):
+    prev = ' '.join(l[0] for l in LINES[:i])[-300:]
+    nxt = LINES[i + 1][0] if i + 1 < len(LINES) else ''
     d = tts(text, prev, nxt)
     s = decode(d['audio_base64'])
     idx = np.where(np.abs(s) > 0.01)[0]
-    a0, a1 = max(0, idx[0] - 400), idx[-1] + 4000
+    a0, a1 = max(0, idx[0] - 300), idx[-1] + 2500
     trim = a0 / SR
-    al = d['alignment']; chars = ''.join(al['characters']); starts = al['character_start_times_seconds']
-    found = {}
-    for name, phrase in anchors.items():
-        pos = chars.find(phrase)
-        assert pos >= 0, (name, phrase)
-        found[name] = round(starts[pos] - trim, 2)
-    clips.append((s[a0:a1], found, mn))
-
-# monta a linha do tempo
-scenes, anchors, t = [], {}, 0.0
-for i, (clip, found, mn) in enumerate(clips):
+    clip = s[a0:a1]
+    al = d['alignment']; chars = ''.join(al['characters'])
+    cs, ce = al['character_start_times_seconds'], al['character_end_times_seconds']
+    for name, phrase in anc.items():
+        pos = chars.find(phrase); assert pos >= 0, (name, phrase)
+        anchors[name] = round(t + cs[pos] - trim, 3)
+    # palavras
+    j = 0
+    while j < len(chars):
+        if chars[j].isspace(): j += 1; continue
+        k = j
+        while k < len(chars) and not chars[k].isspace(): k += 1
+        words.append({'w': chars[j:k], 's': round(t + cs[j] - trim, 3), 'e': round(t + ce[k - 1] - trim, 3), 'line': i})
+        j = k
     dur = len(clip) / SR
-    need = [mn, LEAD + dur + TAIL] + [LEAD + v + 1.6 for v in found.values()]
-    if i == len(clips) - 1: need.append(LEAD + dur + CTA_HOLD)
-    length = round(max(need), 2)
-    scenes.append({'start': round(t, 2), 'end': round(t + length, 2), 'voice': round(t + LEAD, 2), 'voice_dur': round(dur, 2)})
-    for k, v in found.items(): anchors[k] = round(LEAD + v, 2)   # relativo ao início da cena
-    t += length
-total = round(t, 2)
-assert total <= MAX_TOTAL, f'vídeo ficaria com {total}s'
+    lines.append({'start': round(t, 3), 'end': round(t + dur, 3)})
+    clips.append((t, clip))
+    t += dur + GAP
+total = round(t - GAP + END_HOLD, 2)
 
 out = np.zeros(int(SR * (total + 0.5)))
-for sc, (clip, _, _) in zip(scenes, clips):
-    a = int(sc['voice'] * SR); out[a:a + len(clip)] += clip
+for at, clip in clips:
+    a = int(at * SR); out[a:a + len(clip)] += clip
 out /= np.abs(out).max() / 0.9
 sf.write(os.path.join(HERE, 'narracao.wav'), out.astype(np.float32), SR)
 
-tl = {'duration': total, 'scenes': scenes, 'anchors': anchors}
+tl = {'duration': total, 'lines': lines, 'words': words, 'anchors': anchors}
 json.dump(tl, open(os.path.join(ROOT, 'timeline.json'), 'w'), indent=1)
 open(os.path.join(ROOT, 'timeline.js'), 'w').write('window.TIMELINE = ' + json.dumps(tl) + ';\n')
-print(json.dumps(tl, indent=1))
+print('duração', total)
+print('frases', [l['start'] for l in lines])
+print('âncoras', anchors)
